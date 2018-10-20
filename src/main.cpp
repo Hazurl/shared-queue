@@ -7,6 +7,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <atomic>
+#include <haz/SharedQueue.hpp>
 
 #define scout ::Out{}
 
@@ -25,7 +26,6 @@ std::mutex Out::mutex{};
 
 using data_t = int;
 
-static std::mutex queue_mutex{};
 static std::atomic_bool stop{false};
 static constexpr std::size_t size_max = 10;
 static constexpr std::size_t buffer_size = 5;
@@ -43,11 +43,28 @@ void real_consumer(data_t) {
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
-void producer(std::queue<data_t>& instr) {
+void producer(haz::SharedQueue<data_t, size_max>& instr) {
     std::array<data_t, buffer_size> buffer;
     std::size_t size = 0;
 
     while(true) {
+        data_t value = real_producer();
+        scout << "Produce " << value << '\n';
+
+producer_lock:
+        instr.lock();
+
+        if (instr.size() >= instr.capacity()) {
+            instr.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds{10});
+            goto producer_lock;
+        }
+
+        instr.push(value);
+        scout << "Insert  " << value << ", " << instr.size() << "/" << instr.capacity() << " elements in queue\n";
+
+        instr.unlock();
+        /*
         // Production until buffer is full
         while(size < buffer_size) {
             if (stop.load())
@@ -59,44 +76,66 @@ void producer(std::queue<data_t>& instr) {
         }
 
         // Move the buffer to the shared queue
-        std::unique_lock<std::mutex> lock{queue_mutex};
+        {
+            std::lock_guard lock {instr};
+            while (instr.size() >= size_max)
+                std::this_thread::sleep_for(std::chrono::milliseconds{10});//can_produce.wait(lock);
 
-        while (instr.size() >= size_max)
-            can_produce.wait(lock);
+            if (stop.load())
+                return;
 
-        if (stop.load())
-            return;
-
-        while(size > 0 && instr.size() < size_max) {
-            --size;
-            scout << "Insert  " << buffer[size] << ", " << instr.size() + 1 << "/" << size_max << " elements in queue\n";
-            instr.push(std::move(buffer[size]));
+            //instr.push_all(std::begin(buffer), std::end(buffer));
+            while(size > 0 && instr.size() < size_max) {
+                --size;
+                scout << "Insert  " << buffer[size] << ", " << instr.size() + 1 << "/" << size_max << " elements in queue\n";
+                instr.push(std::move(buffer[size]));
+            }
         }
-        lock.unlock();
 
-        can_comsume.notify_one();
+        //can_comsume.notify_one();*/
     }
 }
 
-void consumer(std::queue<data_t>& instr) {
+void consumer(haz::SharedQueue<data_t, size_max>& instr) {
     std::array<data_t, buffer_size> buffer;
     std::size_t size = 0;
     while(true) {
-        // Fill the buffer from the shared queue
-        std::unique_lock<std::mutex> lock{queue_mutex};
+        instr.lock();
 
-        while (instr.empty())
-            can_comsume.wait(lock);
-
-        if (stop.load())
-            return;
-
-        while(size < buffer_size && !instr.empty()) {
-            scout << "Pop     " << instr.front() << ", " << instr.size() - 1 << "/" << size_max << " elements in queue\n";
-            buffer[size++] = std::move(instr.front());
-            instr.pop();
+        if (instr.empty()) {
+            instr.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds{10});
+            continue;
         }
-        lock.unlock();
+
+        data_t value = instr.top();
+        instr.pop();
+        scout << "Pop     " << value << ", " << instr.size() << "/" << instr.capacity() << " elements in queue\n";
+
+        instr.unlock();
+
+        real_consumer(value);
+        scout << "Comsume " << value << '\n';
+
+        // Fill the buffer from the shared queue
+        /*{
+            while (!instr.try_lock())
+                std::this_thread::sleep_for(std::chrono::milliseconds{10});//can_comsume.wait(lock);
+
+            if (instr.empty()) {
+                instr.unlock();
+                continue;
+            }
+
+            if (stop.load())
+                return;
+
+            while(size < buffer_size && !instr.empty()) {
+                scout << "Pop     " << instr.top() << ", " << instr.size() - 1 << "/" << size_max << " elements in queue\n";
+                buffer[size++] = std::move(instr.top());
+                instr.pop();
+            }
+        }
 
         // Comsume until buffer is empty
         while(size > 0) {
@@ -106,18 +145,18 @@ void consumer(std::queue<data_t>& instr) {
             data_t value = buffer[--size];
             real_consumer(value);
             scout << "Comsume " << value << ", " << size << "/" << buffer_size << " elements in buffer\n";
-        }
+        }*/
 
-        can_produce.notify_one();
+        //can_produce.notify_one();
     }
 }
 
 int main() {
 
-    std::queue<data_t> data_ts;
+    haz::SharedQueue<data_t, size_max> queue;
 
-    std::thread producer_thread(producer, std::ref(data_ts));
-    std::thread consumer_thread(consumer, std::ref(data_ts));
+    std::thread producer_thread(producer, std::ref(queue));
+    std::thread consumer_thread(consumer, std::ref(queue));
 
     std::cin.get();
     scout << "Stopping...\n";
