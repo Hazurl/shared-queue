@@ -11,8 +11,21 @@ class SharedQueue {
 public:
 
     std::unique_lock<std::mutex> acquire_lock() { return std::unique_lock(mutex); }
-    void wait_not_empty(std::unique_lock<std::mutex>& lock) { return not_empty_cv.wait(lock, [this] () { return !this->empty(); }); }
-    void wait_not_full (std::unique_lock<std::mutex>& lock) { return not_full_cv .wait(lock, [this] () { return this->size() < this->capacity(); }); }
+
+    std::unique_lock<std::mutex> wait_not_empty() { 
+        return wait_not_empty(acquire_lock());
+    }
+    std::unique_lock<std::mutex> wait_not_empty(std::unique_lock<std::mutex> lock) { 
+        not_empty_cv.wait(lock, [this] () { return !this->empty(); }); 
+        return std::move(lock);
+    }
+    std::unique_lock<std::mutex> wait_not_full() { 
+        return wait_not_full(acquire_lock());
+    }
+    std::unique_lock<std::mutex> wait_not_full(std::unique_lock<std::mutex> lock) { 
+        not_full_cv.wait(lock, [this] () { return this->size() < this->capacity(); });
+        return std::move(lock);
+    }
 
     T&       top()       { return data[first]; };
     T const& top() const { return data[first]; };

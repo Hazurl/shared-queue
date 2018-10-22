@@ -12,8 +12,7 @@ public:
     Producer(SharedQueue<T, S>& queue) : queue(queue) {}
 
     void push(T const& value) {
-        auto lock = queue.acquire_lock();
-        queue.wait_not_full(lock);
+        auto lock = queue.wait_not_full();
 
         queue.push(value);
 

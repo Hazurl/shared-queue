@@ -12,8 +12,7 @@ public:
     Consumer(SharedQueue<T, S>& queue) : queue(queue) {}
 
     T pop() {
-        auto lock = queue.acquire_lock();
-        queue.wait_not_empty(lock);
+        auto lock = queue.wait_not_empty();
 
         T value = queue.top();
         queue.pop();
