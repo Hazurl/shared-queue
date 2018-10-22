@@ -9,11 +9,7 @@ namespace haz {
 template<typename T, std::size_t S>
 class SharedQueue {
 public:
-/*
-    void lock() { return mutex.lock(); }
-    void unlock() { return mutex.unlock(); }
-    bool try_lock() { return mutex.try_lock(); }
-*/
+
     std::unique_lock<std::mutex> acquire_lock() { return std::unique_lock(mutex); }
     void wait_not_empty(std::unique_lock<std::mutex>& lock) { return not_empty_cv.wait(lock, [this] () { return !this->empty(); }); }
     void wait_not_full (std::unique_lock<std::mutex>& lock) { return not_full_cv .wait(lock, [this] () { return this->size() < this->capacity(); }); }
@@ -23,7 +19,7 @@ public:
 
     void pop() {
         --cur_size;
-        first = wrap(first + 1);
+        first = (first + 1) % S;
         not_full_cv.notify_one();
     }
 
@@ -33,14 +29,8 @@ public:
 
         ++cur_size;
         data[last] = t;
-        last = wrap(last + 1);
+        last = (last + 1) % S;
         not_empty_cv.notify_one();
-    }
-
-    template<typename I>
-    void push_all(I begin, I end) {
-        for(; begin != end && cur_size < S; ++begin)
-            push(*begin);
     }
 
     template<typename...Args>
@@ -50,7 +40,7 @@ public:
 
         ++cur_size;
         data[last] = T { std::forward<Args&&>(args)... };
-        last = wrap(last + 1);
+        last = (last + 1) % S;
         not_empty_cv.notify_one();
     }
 
@@ -67,14 +57,6 @@ public:
     }
 
 private:
-
-    static std::size_t wrap(std::size_t n) {
-        if constexpr ((S & (S - 1)) == 0) { // is power of two
-            return n & (S - 1);
-        } else {
-            return n % S;
-        }
-    }
 
     std::array<T, S> data;
     std::size_t first{0};
