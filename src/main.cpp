@@ -95,3 +95,4 @@ int main() {
     std::chrono::duration<double> elapsed = end - start;
     scout << "Elapsed: " << count.load()  << " in " << elapsed.count() << "s ~" << static_cast<double>(count.load()) / elapsed.count() << " data/s\n"; 
 }
+

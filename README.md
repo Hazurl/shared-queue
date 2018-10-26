@@ -5,6 +5,11 @@ Any number of thread can be either a producer or a consumer, respectively pushin
 An additional policy can be used to add a buffer so that the lock become less stressed.
 
 ```cpp 
+#include <haz/SharedQueue.hpp>
+#include <haz/Producer.hpp>
+#include <haz/Consumer.hpp>
+#include <thread>
+#include <atomic>
 
 using data_t = int;
 
@@ -45,7 +50,6 @@ void consumer(Cons_t cons) {
 int main() {
     haz::SharedQueue<data_t, size_max> queue;
 
-    auto start = std::chrono::system_clock::now();
     std::thread producer_thread(producer, Prod_t{queue});
     std::thread consumer_thread(consumer, Cons_t{queue});
 
