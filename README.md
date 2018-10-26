@@ -16,7 +16,7 @@ using Cons_t = haz::Consumer<data_t,                    size_max,               
 
 data_t real_producer() {
     std::this_thread::sleep_for(std::chrono::milliseconds(100)); // fake work
-    int n = std::rand() % 900 + 100;
+    data_t n = std::rand() % 900 + 100;
     return n;
 }
 
