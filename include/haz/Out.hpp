@@ -21,4 +21,41 @@ private:
 
 std::mutex Out::mutex{};
 
+template<typename T>
+struct alignas(T) Manual {
+
+    union {
+        T value;
+    };
+
+    Manual() {};
+    ~Manual() {};
+
+    template<typename...Args>
+    void construct(Args&&... args) {
+        new (&value) T (std::forward<Args>(args)...);
+    }
+
+    void destruct() {
+        value.~T();
+    }
+};
+
+class BufferedOut {
+public:
+
+    BufferedOut() { out.construct(); }
+    ~BufferedOut() { out.destruct(); }
+
+    void dump() { out.destruct(); out.construct(); }
+
+    Out& get() { return out.value; }
+    Out const& get() const { return out.value; }
+
+private:
+
+    Manual<Out> out;
+
+};
+
 }

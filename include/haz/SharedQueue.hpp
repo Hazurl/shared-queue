@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <mutex>
 
+#include <haz/Policy.hpp>
+
 namespace haz {
 
 template<typename T, std::size_t S>
@@ -16,15 +18,31 @@ public:
         return wait_not_empty(acquire_lock());
     }
     std::unique_lock<std::mutex> wait_not_empty(std::unique_lock<std::mutex> lock) { 
-        not_empty_cv.wait(lock, [this] () { return !this->empty(); }); 
+        if (!interrupt)
+            not_empty_cv.wait(lock, [this] () { return !this->empty() || interrupt.load(); }); 
+        if (interrupt) {
+            lock.unlock();
+            throw std::runtime_error("Interrupt thread!");
+        }
         return std::move(lock);
     }
     std::unique_lock<std::mutex> wait_not_full() { 
         return wait_not_full(acquire_lock());
     }
     std::unique_lock<std::mutex> wait_not_full(std::unique_lock<std::mutex> lock) { 
-        not_full_cv.wait(lock, [this] () { return this->size() < this->capacity(); });
+        if (!interrupt)
+            not_full_cv.wait(lock, [this] () { return this->size() < this->capacity() || interrupt.load(); });
+        if (interrupt) {
+            lock.unlock();
+            throw std::runtime_error("Interrupt thread!");
+        }
         return std::move(lock);
+    }
+
+    void interrupt_all() {
+        interrupt.store(true);
+        not_full_cv.notify_all();
+        not_empty_cv.notify_all();
     }
 
     T&       top()       { return data[first]; };
@@ -42,17 +60,6 @@ public:
 
         ++cur_size;
         data[last] = t;
-        last = (last + 1) % S;
-        not_empty_cv.notify_one();
-    }
-
-    template<typename...Args>
-    void emplace(Args&&... args) {
-        if (cur_size >= S)
-            return;
-
-        ++cur_size;
-        data[last] = T { std::forward<Args&&>(args)... };
         last = (last + 1) % S;
         not_empty_cv.notify_one();
     }
@@ -77,6 +84,7 @@ private:
     std::size_t cur_size{0};
 
     std::mutex mutex;
+    std::atomic_bool interrupt{false};
     std::condition_variable not_empty_cv;
     std::condition_variable not_full_cv;
 
