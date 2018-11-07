@@ -452,11 +452,187 @@ int main() {
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="at.html">at</a> </td><td> Access specified element with bounds checking </td></tr>
 </tbody></table>
-<a class="header" href="#clear" id="clear"><h1>clear</h1></a>
-<a class="header" href="#clear-1" id="clear-1"><h1>clear</h1></a>
-<a class="header" href="#push_back" id="push_back"><h1>push_back</h1></a>
+<a class="header" href="#hazsharedqueueclear" id="hazsharedqueueclear"><h1><strong>haz::SharedQueue::clear</strong></h1></a>
+<pre><code class="language-cpp">constexpr void clear() noexcept;
+</code></pre>
+<p>Remove all elements of the container. After that <code>size()</code> returns 0.
+Invalidate all iterators, references and pointers.</p>
+<a class="header" href="#parameters-10" id="parameters-10"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-10" id="return-value-10"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity-10" id="complexity-10"><h2>Complexity</h2></a>
+<p>Constant if the elements are trivially destructible, otherwise linear in the size of the container.</p>
+<a class="header" href="#example-10" id="example-10"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;Size before : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
+    queue.clear();
+    std::cout &lt;&lt; &quot;Size after : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Size before : 3
+Size afer : 0
+</code></pre>
+<a class="header" href="#see-also-10" id="see-also-10"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueueclear-1" id="hazsharedqueueclear-1"><h1><strong>haz::SharedQueue::clear</strong></h1></a>
+<pre><code class="language-cpp">constexpr void clear() noexcept;
+</code></pre>
+<p>Remove all elements of the container. After that <code>size()</code> returns 0.
+Invalidate all iterators, references and pointers.</p>
+<a class="header" href="#parameters-11" id="parameters-11"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-11" id="return-value-11"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity-11" id="complexity-11"><h2>Complexity</h2></a>
+<p>Constant if the elements are trivially destructible, otherwise linear in the size of the container.</p>
+<a class="header" href="#example-11" id="example-11"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;Size before : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
+    queue.clear();
+    std::cout &lt;&lt; &quot;Size after : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Size before : 3
+Size afer : 0
+</code></pre>
+<a class="header" href="#see-also-11" id="see-also-11"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueuepush_back" id="hazsharedqueuepush_back"><h1><strong>haz::SharedQueue::push_back</strong></h1></a>
+<pre><code class="language-cpp">void push_back(T const&amp; value);     (1)
+void push_back(T&amp;&amp; value);          (2)
+</code></pre>
+<p>Insert the element at the end of the container.<br />
+    (1) The new element is initialized as a copy of <code>value</code><br />
+    (2) <code>value</code> is moved into the new element</p>
+<p>All iterators past-the-end, end included, are invalidated. No reference are invalidated.
+If the container is full, i.e. <code>size() == max_size()</code> then the behaviour is undefined.</p>
+<a class="header" href="#parameters-12" id="parameters-12"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> value </td><td> the value of the element to append </td></tr>
+</tbody></table>
+<a class="header" href="#type-requirement" id="type-requirement"><h3>Type requirement</h3></a>
+<p><code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/CopyInsertable">CopyInsertable</a></em> in order to use overload (1).<br />
+<code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/MoveInsertable">MoveInsertable</a></em> in order to use overload (2).</p>
+<a class="header" href="#return-value-12" id="return-value-12"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity-12" id="complexity-12"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#exception-1" id="exception-1"><h2>Exception</h2></a>
+<p>If an exception is thrown, this function has no effect (strong exception guarantee).</p>
+<a class="header" href="#example-12" id="example-12"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    haz::SharedQueue&lt;std::string, 10&gt; queue;
+    
+    queue.push_back(&quot;abc&quot;);
+    
+    std::string s = &quot;def&quot;;
+    queue.push_back(std::move(s));
+
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto const&amp; i : queue) {
+        std::cout &lt;&lt; std::quoted(i) &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents:
+&quot;abc&quot;
+&quot;def&quot;
+</code></pre>
+<a class="header" href="#see-also-12" id="see-also-12"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
+</tbody></table>
 <a class="header" href="#pop_front" id="pop_front"><h1>pop_front</h1></a>
-<a class="header" href="#emplace_back" id="emplace_back"><h1>emplace_back</h1></a>
+<a class="header" href="#hazsharedqueueemplace_back" id="hazsharedqueueemplace_back"><h1><strong>haz::SharedQueue::emplace_back</strong></h1></a>
+<pre><code class="language-cpp">template&lt;typename...Args&gt;
+reference emplace_back(Args&amp;&amp;... args);
+</code></pre>
+<p>Construct a new element at the end of the container. The element is constructed in place using placement-new. The arguments <code>args...</code> are forwarded to the constructor using <code>std::forward&lt;Args&gt;(args)...</code>.
+All iterators past-the-end, end included, are invalidated. No reference are invalidated.
+If the container is full, i.e. <code>size() == max_size()</code> then the behaviour is undefined.</p>
+<a class="header" href="#parameters-13" id="parameters-13"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> args </td><td> arguments to forward to the constructor of the element </td></tr>
+</tbody></table>
+<a class="header" href="#type-requirement-1" id="type-requirement-1"><h3>Type requirement</h3></a>
+<p>T (the container's element type) must meet the requirement of <em><a href="https://en.cppreference.com/w/cpp/named_req/EmplaceConstructible">EmplaceConstructible</a></em>.</p>
+<a class="header" href="#return-value-13" id="return-value-13"><h2>Return value</h2></a>
+<p>Reference to the inserted element.</p>
+<a class="header" href="#complexity-13" id="complexity-13"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#exception-2" id="exception-2"><h2>Exception</h2></a>
+<p>If an exception is thrown, this function has no effect (strong exception guarantee).</p>
+<a class="header" href="#example-13" id="example-13"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+struct Person {
+    std::string name;
+    unsigned age;
+
+    Person(std::string name, unsigned age) : name(name), age(age) {
+        std::cout &lt;&lt; &quot;A person is constructed!\n&quot;;
+    }
+
+    Person(Person&amp;&amp; other) : name(std::move(other.name)), age(other.age) {
+        std::cout &lt;&lt; &quot;A person is moved!\n&quot;;
+    }
+
+    Person&amp; operator=(Person const&amp; other) = default;
+};
+
+int main() {
+    haz::SharedQueue&lt;Person, 10&gt; queue;
+
+    std::cout &lt;&lt; &quot;emplace_back:\n&quot;;
+    queue.emplace_back(&quot;John&quot;, 32);
+
+    std::cout &lt;&lt; &quot;\npush_back:\n&quot;;
+    queue.push_back(Person(&quot;Bob&quot;, 47));
+
+    std::cout &lt;&lt; &quot;\nContents:\n&quot;;
+    for(auto const&amp; person : queue) {
+        std::cout &lt;&lt; person.name &lt;&lt; &quot; is &quot; &lt;&lt; person.age &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>emplace_back: 
+A person is constructed!
+
+push_back: 
+A person is constructed!
+A person is moved!
+
+Contents:
+John is 32
+Bob is 47
+</code></pre>
+<a class="header" href="#see-also-13" id="see-also-13"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="push_back.html">push_back</a> </td><td> Insert an element to the end </td></tr>
+</tbody></table>
 <a class="header" href="#swap" id="swap"><h1>swap</h1></a>
 <a class="header" href="#begin-cbegin" id="begin-cbegin"><h1>begin, cbegin</h1></a>
 <a class="header" href="#begin-cbegin-1" id="begin-cbegin-1"><h1>begin, cbegin</h1></a>

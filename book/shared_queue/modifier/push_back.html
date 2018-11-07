@@ -136,7 +136,56 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#push_back" id="push_back"><h1>push_back</h1></a>
+                        <a class="header" href="#hazsharedqueuepush_back" id="hazsharedqueuepush_back"><h1><strong>haz::SharedQueue::push_back</strong></h1></a>
+<pre><code class="language-cpp">void push_back(T const&amp; value);     (1)
+void push_back(T&amp;&amp; value);          (2)
+</code></pre>
+<p>Insert the element at the end of the container.<br />
+    (1) The new element is initialized as a copy of <code>value</code><br />
+    (2) <code>value</code> is moved into the new element</p>
+<p>All iterators past-the-end, end included, are invalidated. No reference are invalidated.
+If the container is full, i.e. <code>size() == max_size()</code> then the behaviour is undefined.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> value </td><td> the value of the element to append </td></tr>
+</tbody></table>
+<a class="header" href="#type-requirement" id="type-requirement"><h3>Type requirement</h3></a>
+<p><code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/CopyInsertable">CopyInsertable</a></em> in order to use overload (1).<br />
+<code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/MoveInsertable">MoveInsertable</a></em> in order to use overload (2).</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
+<p>If an exception is thrown, this function has no effect (strong exception guarantee).</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main() {
+    haz::SharedQueue&lt;std::string, 10&gt; queue;
+    
+    queue.push_back(&quot;abc&quot;);
+    
+    std::string s = &quot;def&quot;;
+    queue.push_back(std::move(s));
+
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto const&amp; i : queue) {
+        std::cout &lt;&lt; std::quoted(i) &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents:
+&quot;abc&quot;
+&quot;def&quot;
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
+</tbody></table>
 
                     </main>
 
