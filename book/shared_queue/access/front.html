@@ -136,7 +136,36 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#front" id="front"><h1>front</h1></a>
+                        <a class="header" href="#hazsharedqueuefront" id="hazsharedqueuefront"><h1><strong>haz::SharedQueue::front</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference front() const noexcept;
+constexpr reference front() noexcept;
+</code></pre>
+<p>Returns the first element of the container.
+Calling <code>front</code> on an empty container is undefined.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>Reference to the first element.</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#notes" id="notes"><h2>Notes</h2></a>
+<p>The element returned is the first element that has been pushed but not poped yet.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The first element is &quot; &lt;&lt; queue.front() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The first element is 0
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="back.html">back</a> </td><td> Access the last element </td></tr>
+</tbody></table>
 
                     </main>
 

@@ -136,7 +136,38 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#at" id="at"><h1>at</h1></a>
+                        <a class="header" href="#hazsharedqueueat" id="hazsharedqueueat"><h1><strong>haz::SharedQueue::at</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference at(size_type index) const;
+constexpr reference at(size_type index);
+</code></pre>
+<p>Returns the number a reference to the element at the index specified.
+If the index is not within the range [0, size()), an exception of type <code>std::out_of_range</code> is thrown.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> index </td><td> index of the element to return </td></tr>
+</tbody></table>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>Reference to the requested element.</p>
+<a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
+<p><code>std::out_of_range</code> if <code>index &gt;= size()</code>.</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The second element is &quot; &lt;&lt; queue.at(1) &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The second element is 1
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="operator.html">operator []</a> </td><td> Access specified element without bounds checking </td></tr>
+</tbody></table>
 
                     </main>
 

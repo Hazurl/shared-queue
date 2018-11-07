@@ -301,11 +301,157 @@ not_empty_queue is empty ? 0
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
 </tbody></table>
-<a class="header" href="#front" id="front"><h1>front</h1></a>
-<a class="header" href="#front-1" id="front-1"><h1>front</h1></a>
-<a class="header" href="#back" id="back"><h1>back</h1></a>
-<a class="header" href="#at" id="at"><h1>at</h1></a>
-<a class="header" href="#operator-" id="operator-"><h1>operator []</h1></a>
+<a class="header" href="#hazsharedqueuefront" id="hazsharedqueuefront"><h1><strong>haz::SharedQueue::front</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference front() const noexcept;
+constexpr reference front() noexcept;
+</code></pre>
+<p>Returns the first element of the container.
+Calling <code>front</code> on an empty container is undefined.</p>
+<a class="header" href="#parameters-5" id="parameters-5"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-5" id="return-value-5"><h2>Return value</h2></a>
+<p>Reference to the first element.</p>
+<a class="header" href="#complexity-5" id="complexity-5"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#notes-3" id="notes-3"><h2>Notes</h2></a>
+<p>The element returned is the first element that has been pushed but not poped yet.</p>
+<a class="header" href="#example-5" id="example-5"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The first element is &quot; &lt;&lt; queue.front() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The first element is 0
+</code></pre>
+<a class="header" href="#see-also-5" id="see-also-5"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="back.html">back</a> </td><td> Access the last element </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueuefront-1" id="hazsharedqueuefront-1"><h1><strong>haz::SharedQueue::front</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference front() const noexcept;
+constexpr reference front() noexcept;
+</code></pre>
+<p>Returns the first element of the container.
+Calling <code>front</code> on an empty container is undefined.</p>
+<a class="header" href="#parameters-6" id="parameters-6"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-6" id="return-value-6"><h2>Return value</h2></a>
+<p>Reference to the first element.</p>
+<a class="header" href="#complexity-6" id="complexity-6"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#notes-4" id="notes-4"><h2>Notes</h2></a>
+<p>The element returned is the first element that has been pushed but not poped yet.</p>
+<a class="header" href="#example-6" id="example-6"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The first element is &quot; &lt;&lt; queue.front() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The first element is 0
+</code></pre>
+<a class="header" href="#see-also-6" id="see-also-6"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="back.html">back</a> </td><td> Access the last element </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueueback" id="hazsharedqueueback"><h1><strong>haz::SharedQueue::back</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference back() const noexcept;
+constexpr reference back() noexcept;
+</code></pre>
+<p>Returns the last element of the container.
+Calling <code>back</code> on an empty container is undefined.</p>
+<a class="header" href="#parameters-7" id="parameters-7"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-7" id="return-value-7"><h2>Return value</h2></a>
+<p>Reference to the last element.</p>
+<a class="header" href="#complexity-7" id="complexity-7"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#notes-5" id="notes-5"><h2>Notes</h2></a>
+<p>The element returned is the last element that has been pushed.</p>
+<a class="header" href="#example-7" id="example-7"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The last element is &quot; &lt;&lt; queue.back() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The last element is 2
+</code></pre>
+<a class="header" href="#see-also-7" id="see-also-7"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="front.html">front</a> </td><td> Access the first element </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueueat" id="hazsharedqueueat"><h1><strong>haz::SharedQueue::at</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference at(size_type index) const;
+constexpr reference at(size_type index);
+</code></pre>
+<p>Returns the number a reference to the element at the index specified.
+If the index is not within the range [0, size()), an exception of type <code>std::out_of_range</code> is thrown.</p>
+<a class="header" href="#parameters-8" id="parameters-8"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> index </td><td> index of the element to return </td></tr>
+</tbody></table>
+<a class="header" href="#return-value-8" id="return-value-8"><h2>Return value</h2></a>
+<p>Reference to the requested element.</p>
+<a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
+<p><code>std::out_of_range</code> if <code>index &gt;= size()</code>.</p>
+<a class="header" href="#complexity-8" id="complexity-8"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-8" id="example-8"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The second element is &quot; &lt;&lt; queue.at(1) &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The second element is 1
+</code></pre>
+<a class="header" href="#see-also-8" id="see-also-8"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="operator.html">operator []</a> </td><td> Access specified element without bounds checking </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueueoperator" id="hazsharedqueueoperator"><h1><strong>haz::SharedQueue::operator[]</strong></h1></a>
+<pre><code class="language-cpp">constexpr const_reference operator[](size_type index) const noexcept;
+constexpr reference operator[](size_type index) noexcept;
+</code></pre>
+<p>Returns the number a reference to the element at the index specified.</p>
+<a class="header" href="#parameters-9" id="parameters-9"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> index </td><td> index of the element to return </td></tr>
+</tbody></table>
+<a class="header" href="#return-value-9" id="return-value-9"><h2>Return value</h2></a>
+<p>Reference to the requested element.</p>
+<a class="header" href="#complexity-9" id="complexity-9"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-9" id="example-9"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
+    std::cout &lt;&lt; &quot;The second element is &quot; &lt;&lt; queue[1] &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The second element is 1
+</code></pre>
+<a class="header" href="#see-also-9" id="see-also-9"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="at.html">at</a> </td><td> Access specified element with bounds checking </td></tr>
+</tbody></table>
 <a class="header" href="#clear" id="clear"><h1>clear</h1></a>
 <a class="header" href="#clear-1" id="clear-1"><h1>clear</h1></a>
 <a class="header" href="#push_back" id="push_back"><h1>push_back</h1></a>
