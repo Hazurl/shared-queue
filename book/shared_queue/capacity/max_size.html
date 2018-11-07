@@ -1,0 +1,229 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>max_size - Shared Queue</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "../../";</script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="../../overall.html"><strong aria-hidden="true">1.</strong> Overall</a></li><li><a href="../../shared_queue.html"><strong aria-hidden="true">2.</strong> Shared Queue</a></li><li><ol class="section"><li><a href="../../shared_queue/capacity.html"><strong aria-hidden="true">2.1.</strong> Capacity</a></li><li><ol class="section"><li><a href="../../shared_queue/capacity/capacity.html"><strong aria-hidden="true">2.1.1.</strong> capacity</a></li><li><a href="../../shared_queue/capacity/max_size.html" class="active"><strong aria-hidden="true">2.1.2.</strong> max_size</a></li><li><a href="../../shared_queue/capacity/size.html"><strong aria-hidden="true">2.1.3.</strong> size</a></li><li><a href="../../shared_queue/capacity/empty.html"><strong aria-hidden="true">2.1.4.</strong> empty</a></li></ol></li><li><a href="../../shared_queue/access.html"><strong aria-hidden="true">2.2.</strong> Element Access</a></li><li><ol class="section"><li><a href="../../shared_queue/access/front.html"><strong aria-hidden="true">2.2.1.</strong> front</a></li><li><a href="../../shared_queue/access/back.html"><strong aria-hidden="true">2.2.2.</strong> back</a></li><li><a href="../../shared_queue/access/at.html"><strong aria-hidden="true">2.2.3.</strong> at</a></li><li><a href="../../shared_queue/access/operator.html"><strong aria-hidden="true">2.2.4.</strong> operator []</a></li></ol></li><li><a href="../../shared_queue/modifier.html"><strong aria-hidden="true">2.3.</strong> Modifier</a></li><li><ol class="section"><li><a href="../../shared_queue/modifier/clear.html"><strong aria-hidden="true">2.3.1.</strong> clear</a></li><li><a href="../../shared_queue/modifier/push_back.html"><strong aria-hidden="true">2.3.2.</strong> push_back</a></li><li><a href="../../shared_queue/modifier/pop_front.html"><strong aria-hidden="true">2.3.3.</strong> pop_front</a></li><li><a href="../../shared_queue/modifier/emplace_back.html"><strong aria-hidden="true">2.3.4.</strong> emplace_back</a></li><li><a href="../../shared_queue/modifier/swap.html"><strong aria-hidden="true">2.3.5.</strong> swap</a></li></ol></li><li><a href="../../shared_queue/iterators.html"><strong aria-hidden="true">2.4.</strong> Iterators</a></li><li><ol class="section"><li><a href="../../shared_queue/iterators/begin.html"><strong aria-hidden="true">2.4.1.</strong> begin, cbegin</a></li><li><a href="../../shared_queue/iterators/end.html"><strong aria-hidden="true">2.4.2.</strong> end, cend</a></li><li><a href="../../shared_queue/iterators/rbegin.html"><strong aria-hidden="true">2.4.3.</strong> rbegin, crbegin</a></li><li><a href="../../shared_queue/iterators/rend.html"><strong aria-hidden="true">2.4.4.</strong> rend, crend</a></li></ol></li><li><a href="../../shared_queue/non_member.html"><strong aria-hidden="true">2.5.</strong> Non-member functions</a></li><li><ol class="section"><li><a href="../../shared_queue/non_member/compare.html"><strong aria-hidden="true">2.5.1.</strong> operator ==, !=, &lt;, &lt;=, &gt;, &gt;=</a></li><li><a href="../../shared_queue/non_member/swap.html"><strong aria-hidden="true">2.5.2.</strong> std::swap</a></li></ol></li><li><a href="../../shared_queue/thread.html"><strong aria-hidden="true">2.6.</strong> Thread Synchronisation</a></li><li><ol class="section"><li><a href="../../shared_queue/thread/acquire_lock.html"><strong aria-hidden="true">2.6.1.</strong> acquire_lock</a></li><li><a href="../../shared_queue/thread/wait_not_empty.html"><strong aria-hidden="true">2.6.2.</strong> wait_not_empty</a></li><li><a href="../../shared_queue/thread/wait_not_full.html"><strong aria-hidden="true">2.6.3.</strong> wait_not_full</a></li><li><a href="../../shared_queue/thread/interrupt_all.html"><strong aria-hidden="true">2.6.4.</strong> interrupt_all</a></li></ol></li></ol></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Shared Queue</h1> 
+
+                        <div class="right-buttons">
+                            <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#hazsharedqueuemax_size" id="hazsharedqueuemax_size"><h1><strong>haz::SharedQueue::max_size</strong></h1></a>
+<pre><code class="language-cpp">constexpr size_type max_size() const noexcept;
+</code></pre>
+<p>Returns the maximum number of element in the container.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>Maximum number of elements.</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#notes" id="notes"><h2>Notes</h2></a>
+<p>For <code>haz::SharedQueue&lt;T, N&gt;</code>, the value returned is <code>S</code>.<br />
+It's a synonym of <a href="capacity.html">capacity</a>.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue;
+    std::cout &lt;&lt; &quot;The maximum size of the queue is &quot; &lt;&lt; queue.max_size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>The maximum size of the queue is 10
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
+<tr><td align="right"> <a href="capacity.html">capacity</a> </td><td> Returns the maximum number of elements </td></tr>
+</tbody></table>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../../shared_queue/capacity/capacity.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../../shared_queue/capacity/size.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="../../shared_queue/capacity/capacity.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="../../shared_queue/capacity/size.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="../../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
