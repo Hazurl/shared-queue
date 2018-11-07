@@ -32,8 +32,8 @@ struct alignas(T) Manual {
     ~Manual() {};
 
     template<typename...Args>
-    void construct(Args&&... args) {
-        new (&value) T (std::forward<Args>(args)...);
+    T& construct(Args&&... args) {
+        return *new (&value) T (std::forward<Args>(args)...);
     }
 
     void destruct() {
