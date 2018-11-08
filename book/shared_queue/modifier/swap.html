@@ -136,7 +136,71 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#swap" id="swap"><h1>swap</h1></a>
+                        <a class="header" href="#hazsharedqueueswap" id="hazsharedqueueswap"><h1><strong>haz::SharedQueue::swap</strong></h1></a>
+<pre><code class="language-cpp">constexpr void swap(SharedQueue&amp; other) noexcept(/* see below */);
+</code></pre>
+<p>Exchanges the contents of the container with those of other. Does not cause iterators and references to associate with the other container.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> other </td><td> Container to exchange the contents with </td></tr>
+</tbody></table>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
+<blockquote>
+<p><strong>noexcept specification:</strong>
+<code>noexcept(is_nothrow_swappable_v&lt;T&gt;)</code></p>
+</blockquote>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Linear in the size of the container.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue_a{ 0, 1, 2, 3 };
+    haz::SharedQueue&lt;int, 10&gt; queue_b{ 4, 5, 6 };
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+
+    std::cout &lt;&lt; &quot;Swap\n&quot;;
+    queue_a.swap(queue_b);
+
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents of A:
+0, 1, 2, 3,
+Contents of B:
+4, 5, 6,
+Swap
+Contents of A:
+4, 5, 6,
+Contents of B:
+0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="clear.html">clear</a> </td><td> Clear the content </td></tr>
+</tbody></table>
 
                     </main>
 

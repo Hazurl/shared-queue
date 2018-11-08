@@ -1,3 +1,5 @@
+.PHONY: build open
+
 build:
 	mdbook build
 

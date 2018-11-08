@@ -136,7 +136,39 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#operator------" id="operator------"><h1>operator ==, !=, &lt;, &lt;=, &gt;, &gt;=</h1></a>
+                        <a class="header" href="#operator------hazsharedqueue" id="operator------hazsharedqueue"><h1><strong>operator==, !=, &lt;, &lt;=, &gt;, &gt;= (haz::SharedQueue)</strong></h1></a>
+<pre><code class="language-cpp">template&lt;typename T, std::size_t N&gt;
+constexpr bool operator==(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (1)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator!=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (2)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&lt;(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (3)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&lt;=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (4)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&gt;(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (5)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&gt;=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (6)
+</code></pre>
+<p>Compare the contents of two queue.
+    (1-2) Checks if the contents of <code>lhs</code> and <code>rhs</code> are equal, that is, whether each element in <code>lhs</code> compares equals with the element in <code>rhs</code> at the same position.
+    (3-6) Compares the contents of <code>lhs</code> and <code>rhs</code> lexicographically. The comparaison is performed by a function equivalent to <code>std::lexicographical_compare</code>.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> lhs, rhs </td><td> Containers whose contents to compare </td></tr>
+</tbody></table>
+<a class="header" href="#type-requirement" id="type-requirement"><h3>Type requirement</h3></a>
+<p><code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/EqualityComparable">EqualityComparable</a></em> in order to use overload (1-2).<br />
+<code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/LessThanComparable">LessThanComparable</a></em> in order to use overload (3-6).</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>(1) <code>true</code> if the contents of the containers are equal, <code>false</code> otherwise.<br />
+(2) <code>true</code> if the contents of the containers are not equal, <code>false</code> otherwise.<br />
+(3) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>less</em> than the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(4) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>less than or equal</em> the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(5) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>greater</em> than the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(6) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>greater than or equal</em> the contents of <code>rhs</code>, <code>false</code> otherwise.</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
 
                     </main>
 

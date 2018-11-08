@@ -136,35 +136,12 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#hazsharedqueuecapacity" id="hazsharedqueuecapacity"><h1><strong>haz::SharedQueue::capacity</strong></h1></a>
-<pre><code class="language-cpp">constexpr size_type capacity() const noexcept;
-</code></pre>
-<p>Returns the maximum number of element in the container.</p>
-<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
-<p>(none)</p>
-<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
-<p>Maximum number of elements.</p>
-<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
-<p>Constant.</p>
-<a class="header" href="#notes" id="notes"><h2>Notes</h2></a>
-<p>For <code>haz::SharedQueue&lt;T, N&gt;</code>, the value returned is <code>S</code>.<br />
-It's a synonym of <a href="max_size.html">max_size</a>.</p>
-<a class="header" href="#example" id="example"><h2>Example</h2></a>
-<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    haz::SharedQueue&lt;int, 10&gt; queue;
-    std::cout &lt;&lt; &quot;The capacity of the queue is &quot; &lt;&lt; queue.capacity() &lt;&lt; '\n';
-}
-</code></pre>
-<p>Output:</p>
-<pre><code>The capacity of the queue is 10
-</code></pre>
-<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+                        <a class="header" href="#capacity" id="capacity"><h1>Capacity</h1></a>
 <table><thead><tr></tr></thead><tbody>
-<tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
-<tr><td align="right"> <a href="max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="capacity/capacity.html">capacity</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="capacity/empty.html">empty</a> </td><td> Checks whether the container is empty </td></tr>
+<tr><td align="right"> <a href="capacity/max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="capacity/size.html">size</a> </td><td> Returns the number of elements </td></tr>
 </tbody></table>
 
                     </main>

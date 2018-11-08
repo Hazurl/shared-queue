@@ -136,7 +136,50 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#pop_front" id="pop_front"><h1>pop_front</h1></a>
+                        <a class="header" href="#hazsharedqueuepop_front" id="hazsharedqueuepop_front"><h1><strong>haz::SharedQueue::pop_front</strong></h1></a>
+<pre><code class="language-cpp">constexpr void pop_front() noexcept;
+</code></pre>
+<p>Removes the first element of the container. If there are no elements in the container, the behaviour is undefined.
+Iterator and reference to the erased element are invalidated. The other are not unless the container is now empty.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto i : queue) {
+        std::cout &lt;&lt; i &lt;&lt; '\n';
+    }
+
+    std::cout &lt;&lt; &quot;Pop 2 values\n&quot;;
+    queue.pop_front();
+    queue.pop_front();
+
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto i : queue) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents:
+0, 1, 2, 3,
+Pop 2 values
+Contents:
+2, 3,
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="clear.html">clear</a> </td><td> Clear the content </td></tr>
+</tbody></table>
 
                     </main>
 

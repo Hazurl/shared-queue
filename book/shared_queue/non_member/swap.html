@@ -136,7 +136,73 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#stdswap" id="stdswap"><h1>std::swap</h1></a>
+                        <a class="header" href="#stdswap-hazsharedqueue" id="stdswap-hazsharedqueue"><h1><strong>std::swap (haz::SharedQueue)</strong></h1></a>
+<pre><code class="language-cpp">template&lt;typename T, std::size_t N&gt;
+void swap(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept(/* see below */);
+</code></pre>
+<p>Specialize the <code>std::swap</code> algorithm for <code>haz::SharedQueue</code>. Swaps the contents of <code>lhs</code> and <code>rhs</code>. Calls <code>lhs.swap(rhs)</code>.</p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> lhs, rhs </td><td> Containers whose contents to swap </td></tr>
+</tbody></table>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#exceptions" id="exceptions"><h2>Exceptions</h2></a>
+<blockquote>
+<p><strong>noexcept specification:</strong>
+noexcept(noexcept(lhs.swap(rhs)))</p>
+</blockquote>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue_a{ 0, 1, 2, 3 };
+    haz::SharedQueue&lt;int, 10&gt; queue_b{ 4, 5, 6 };
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+
+    std::cout &lt;&lt; &quot;Swap\n&quot;;
+    std::swap(queue_a, queue_b);
+
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents of A:
+0, 1, 2, 3,
+Contents of B:
+4, 5, 6,
+Swap
+Contents of A:
+4, 5, 6,
+Contents of B:
+0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"><a href="../modifier/swap.html">swap</a></td><td> Swaps the contents </td></tr>
+</tbody></table>
 
                     </main>
 

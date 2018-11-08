@@ -136,35 +136,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#hazsharedqueueclear" id="hazsharedqueueclear"><h1><strong>haz::SharedQueue::clear</strong></h1></a>
-<pre><code class="language-cpp">constexpr void clear() noexcept;
-</code></pre>
-<p>Remove all elements of the container. After that <code>size()</code> returns 0.
-Invalidate all iterators, references and pointers.</p>
-<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
-<p>(none)</p>
-<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
-<p>(none)</p>
-<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
-<p>Constant if the elements are trivially destructible, otherwise linear in the size of the container.</p>
-<a class="header" href="#example" id="example"><h2>Example</h2></a>
-<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
-    std::cout &lt;&lt; &quot;Size before : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
-    queue.clear();
-    std::cout &lt;&lt; &quot;Size after : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
-}
-</code></pre>
-<p>Output:</p>
-<pre><code>Size before : 3
-Size afer : 0
-</code></pre>
-<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+                        <a class="header" href="#modifier" id="modifier"><h1>Modifier</h1></a>
 <table><thead><tr></tr></thead><tbody>
-<tr><td align="right"> <a href="pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+<tr><td align="right"> <a href="modifier/clear.html">clear</a> </td><td> Clear the content </td></tr>
+<tr><td align="right"> <a href="modifier/emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
+<tr><td align="right"> <a href="modifier/pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+<tr><td align="right"> <a href="modifier/push_back.html">push_back</a> </td><td> Insert an element to the end </td></tr>
+<tr><td align="right"> <a href="modifier/swap.html">swap</a> </td><td> Swaps the contents </td></tr>
 </tbody></table>
 
                     </main>

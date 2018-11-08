@@ -155,6 +155,48 @@
 N: The maximum number of element in the buffer</p>
 </blockquote>
 <p><strong>It is recommended to use a power of 2 for the size <code>S</code> so the index is computed faster</strong>.</p>
+<a class="header" href="#members-functions" id="members-functions"><h2>Members functions</h2></a>
+<a class="header" href="#element-access" id="element-access"><h3>Element access</h3></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="shared_queue/access/at.html">at</a> </td><td> Access specified element with bounds checking </td></tr>
+<tr><td align="right"> <a href="shared_queue/access/back.html">back</a> </td><td> Access the last element </td></tr>
+<tr><td align="right"> <a href="shared_queue/access/front.html">front</a> </td><td> Access the first element </td></tr>
+<tr><td align="right"> <a href="shared_queue/access/operator.html">operator []</a> </td><td> Access specified element without bounds checking </td></tr>
+</tbody></table>
+<a class="header" href="#iterators" id="iterators"><h3>Iterators</h3></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="shared_queue/iterators/begin.html">begin, cbegin</a> </td><td> Returns an iterator to the beginning </td></tr>
+<tr><td align="right"> <a href="shared_queue/iterators/end.html">end, cend</a> </td><td> Returns an iterator to the end </td></tr>
+<tr><td align="right"> <a href="shared_queue/iterators/rbegin.html">rbegin, crbegin</a> </td><td> Returns a reverse iterator to the beginning </td></tr>
+<tr><td align="right"> <a href="shared_queue/iterators/end.html">end, cend</a> </td><td> Returns a reverse iterator to the end </td></tr>
+</tbody></table>
+<a class="header" href="#capacity" id="capacity"><h3>Capacity</h3></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="shared_queue/capacity/capacity.html">capacity</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="shared_queue/capacity/empty.html">empty</a> </td><td> Checks whether the container is empty </td></tr>
+<tr><td align="right"> <a href="shared_queue/capacity/max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="shared_queue/capacity/size.html">size</a> </td><td> Returns the number of elements </td></tr>
+</tbody></table>
+<a class="header" href="#modifiers" id="modifiers"><h3>Modifiers</h3></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="shared_queue/modifier/clear.html">clear</a> </td><td> Clear the content </td></tr>
+<tr><td align="right"> <a href="shared_queue/modifier/emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
+<tr><td align="right"> <a href="shared_queue/modifier/pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+<tr><td align="right"> <a href="shared_queue/modifier/push_back.html">push_back</a> </td><td> Insert an element to the end </td></tr>
+<tr><td align="right"> <a href="shared_queue/modifier/swap.html">swap</a> </td><td> Swaps the contents </td></tr>
+</tbody></table>
+<a class="header" href="#non-member-function" id="non-member-function"><h3>Non-member function</h3></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="shared_queue/non_member/compare.html">operator ==, !=, &lt;=, &gt;=, &lt;, &gt;</a> </td><td> Lexicograpically compares the values </td></tr>
+<tr><td align="right"> <a href="shared_queue/non_member/swap.html">std::swap</a> </td><td> specialize the <code>std::swap</code> algorithm </td></tr>
+</tbody></table>
+<a class="header" href="#capacity-1" id="capacity-1"><h1>Capacity</h1></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="capacity/capacity.html">capacity</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="capacity/empty.html">empty</a> </td><td> Checks whether the container is empty </td></tr>
+<tr><td align="right"> <a href="capacity/max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
+<tr><td align="right"> <a href="capacity/size.html">size</a> </td><td> Returns the number of elements </td></tr>
+</tbody></table>
 <a class="header" href="#hazsharedqueuecapacity" id="hazsharedqueuecapacity"><h1><strong>haz::SharedQueue::capacity</strong></h1></a>
 <pre><code class="language-cpp">constexpr size_type capacity() const noexcept;
 </code></pre>
@@ -185,8 +227,8 @@ int main() {
 <tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
 <tr><td align="right"> <a href="max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
 </tbody></table>
-<a class="header" href="#hazsharedqueuecapacity-1" id="hazsharedqueuecapacity-1"><h1><strong>haz::SharedQueue::capacity</strong></h1></a>
-<pre><code class="language-cpp">constexpr size_type capacity() const noexcept;
+<a class="header" href="#hazsharedqueuemax_size" id="hazsharedqueuemax_size"><h1><strong>haz::SharedQueue::max_size</strong></h1></a>
+<pre><code class="language-cpp">constexpr size_type max_size() const noexcept;
 </code></pre>
 <p>Returns the maximum number of element in the container.</p>
 <a class="header" href="#parameters-1" id="parameters-1"><h2>Parameters</h2></a>
@@ -197,38 +239,8 @@ int main() {
 <p>Constant.</p>
 <a class="header" href="#notes-1" id="notes-1"><h2>Notes</h2></a>
 <p>For <code>haz::SharedQueue&lt;T, N&gt;</code>, the value returned is <code>S</code>.<br />
-It's a synonym of <a href="max_size.html">max_size</a>.</p>
-<a class="header" href="#example-1" id="example-1"><h2>Example</h2></a>
-<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    haz::SharedQueue&lt;int, 10&gt; queue;
-    std::cout &lt;&lt; &quot;The capacity of the queue is &quot; &lt;&lt; queue.capacity() &lt;&lt; '\n';
-}
-</code></pre>
-<p>Output:</p>
-<pre><code>The capacity of the queue is 10
-</code></pre>
-<a class="header" href="#see-also-1" id="see-also-1"><h2>See also</h2></a>
-<table><thead><tr></tr></thead><tbody>
-<tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
-<tr><td align="right"> <a href="max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
-</tbody></table>
-<a class="header" href="#hazsharedqueuemax_size" id="hazsharedqueuemax_size"><h1><strong>haz::SharedQueue::max_size</strong></h1></a>
-<pre><code class="language-cpp">constexpr size_type max_size() const noexcept;
-</code></pre>
-<p>Returns the maximum number of element in the container.</p>
-<a class="header" href="#parameters-2" id="parameters-2"><h2>Parameters</h2></a>
-<p>(none)</p>
-<a class="header" href="#return-value-2" id="return-value-2"><h2>Return value</h2></a>
-<p>Maximum number of elements.</p>
-<a class="header" href="#complexity-2" id="complexity-2"><h2>Complexity</h2></a>
-<p>Constant.</p>
-<a class="header" href="#notes-2" id="notes-2"><h2>Notes</h2></a>
-<p>For <code>haz::SharedQueue&lt;T, N&gt;</code>, the value returned is <code>S</code>.<br />
 It's a synonym of <a href="capacity.html">capacity</a>.</p>
-<a class="header" href="#example-2" id="example-2"><h2>Example</h2></a>
+<a class="header" href="#example-1" id="example-1"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -240,7 +252,7 @@ int main() {
 <p>Output:</p>
 <pre><code>The maximum size of the queue is 10
 </code></pre>
-<a class="header" href="#see-also-2" id="see-also-2"><h2>See also</h2></a>
+<a class="header" href="#see-also-1" id="see-also-1"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
 <tr><td align="right"> <a href="capacity.html">capacity</a> </td><td> Returns the maximum number of elements </td></tr>
@@ -249,13 +261,13 @@ int main() {
 <pre><code class="language-cpp">constexpr size_type size() const noexcept;
 </code></pre>
 <p>Returns the number of elements in the container.</p>
-<a class="header" href="#parameters-3" id="parameters-3"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-2" id="parameters-2"><h2>Parameters</h2></a>
 <p>(none)</p>
-<a class="header" href="#return-value-3" id="return-value-3"><h2>Return value</h2></a>
+<a class="header" href="#return-value-2" id="return-value-2"><h2>Return value</h2></a>
 <p>The number of elements in a <code>SharedQueue</code>.</p>
-<a class="header" href="#complexity-3" id="complexity-3"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-2" id="complexity-2"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#example-3" id="example-3"><h2>Example</h2></a>
+<a class="header" href="#example-2" id="example-2"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -267,7 +279,7 @@ int main() {
 <p>Output:</p>
 <pre><code>The queue contains 3 elements
 </code></pre>
-<a class="header" href="#see-also-3" id="see-also-3"><h2>See also</h2></a>
+<a class="header" href="#see-also-2" id="see-also-2"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="empty.html">empty</a> </td><td> Checks whether the container is empty </td></tr>
 <tr><td align="right"> <a href="max_size.html">max_size</a> </td><td> Returns the maximum number of elements </td></tr>
@@ -276,13 +288,13 @@ int main() {
 <pre><code class="language-cpp">constexpr bool empty() const noexcept;
 </code></pre>
 <p>Checks whether the container has no elements.</p>
-<a class="header" href="#parameters-4" id="parameters-4"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-3" id="parameters-3"><h2>Parameters</h2></a>
 <p>(none)</p>
-<a class="header" href="#return-value-4" id="return-value-4"><h2>Return value</h2></a>
+<a class="header" href="#return-value-3" id="return-value-3"><h2>Return value</h2></a>
 <p><code>true</code> if the element is empty, otherwise <code>false</code>.</p>
-<a class="header" href="#complexity-4" id="complexity-4"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-3" id="complexity-3"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#example-4" id="example-4"><h2>Example</h2></a>
+<a class="header" href="#example-3" id="example-3"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -297,9 +309,16 @@ int main() {
 <pre><code>empty_queue is empty ? 1
 not_empty_queue is empty ? 0
 </code></pre>
-<a class="header" href="#see-also-4" id="see-also-4"><h2>See also</h2></a>
+<a class="header" href="#see-also-3" id="see-also-3"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="size.html">size</a> </td><td> Returns the number of elements </td></tr>
+</tbody></table>
+<a class="header" href="#element-access-1" id="element-access-1"><h1>Element Access</h1></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="access/at.html">at</a> </td><td> Access specified element with bounds checking </td></tr>
+<tr><td align="right"> <a href="access/back.html">back</a> </td><td> Access the last element </td></tr>
+<tr><td align="right"> <a href="access/front.html">front</a> </td><td> Access the first element </td></tr>
+<tr><td align="right"> <a href="access/operator.html">operator []</a> </td><td> Access specified element without bounds checking </td></tr>
 </tbody></table>
 <a class="header" href="#hazsharedqueuefront" id="hazsharedqueuefront"><h1><strong>haz::SharedQueue::front</strong></h1></a>
 <pre><code class="language-cpp">constexpr const_reference front() const noexcept;
@@ -307,15 +326,15 @@ constexpr reference front() noexcept;
 </code></pre>
 <p>Returns the first element of the container.
 Calling <code>front</code> on an empty container is undefined.</p>
-<a class="header" href="#parameters-5" id="parameters-5"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-4" id="parameters-4"><h2>Parameters</h2></a>
 <p>(none)</p>
-<a class="header" href="#return-value-5" id="return-value-5"><h2>Return value</h2></a>
+<a class="header" href="#return-value-4" id="return-value-4"><h2>Return value</h2></a>
 <p>Reference to the first element.</p>
-<a class="header" href="#complexity-5" id="complexity-5"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-4" id="complexity-4"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#notes-3" id="notes-3"><h2>Notes</h2></a>
+<a class="header" href="#notes-2" id="notes-2"><h2>Notes</h2></a>
 <p>The element returned is the first element that has been pushed but not poped yet.</p>
-<a class="header" href="#example-5" id="example-5"><h2>Example</h2></a>
+<a class="header" href="#example-4" id="example-4"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -327,37 +346,7 @@ int main() {
 <p>Output:</p>
 <pre><code>The first element is 0
 </code></pre>
-<a class="header" href="#see-also-5" id="see-also-5"><h2>See also</h2></a>
-<table><thead><tr></tr></thead><tbody>
-<tr><td align="right"> <a href="back.html">back</a> </td><td> Access the last element </td></tr>
-</tbody></table>
-<a class="header" href="#hazsharedqueuefront-1" id="hazsharedqueuefront-1"><h1><strong>haz::SharedQueue::front</strong></h1></a>
-<pre><code class="language-cpp">constexpr const_reference front() const noexcept;
-constexpr reference front() noexcept;
-</code></pre>
-<p>Returns the first element of the container.
-Calling <code>front</code> on an empty container is undefined.</p>
-<a class="header" href="#parameters-6" id="parameters-6"><h2>Parameters</h2></a>
-<p>(none)</p>
-<a class="header" href="#return-value-6" id="return-value-6"><h2>Return value</h2></a>
-<p>Reference to the first element.</p>
-<a class="header" href="#complexity-6" id="complexity-6"><h2>Complexity</h2></a>
-<p>Constant.</p>
-<a class="header" href="#notes-4" id="notes-4"><h2>Notes</h2></a>
-<p>The element returned is the first element that has been pushed but not poped yet.</p>
-<a class="header" href="#example-6" id="example-6"><h2>Example</h2></a>
-<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
-    std::cout &lt;&lt; &quot;The first element is &quot; &lt;&lt; queue.front() &lt;&lt; '\n';
-}
-</code></pre>
-<p>Output:</p>
-<pre><code>The first element is 0
-</code></pre>
-<a class="header" href="#see-also-6" id="see-also-6"><h2>See also</h2></a>
+<a class="header" href="#see-also-4" id="see-also-4"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="back.html">back</a> </td><td> Access the last element </td></tr>
 </tbody></table>
@@ -367,15 +356,15 @@ constexpr reference back() noexcept;
 </code></pre>
 <p>Returns the last element of the container.
 Calling <code>back</code> on an empty container is undefined.</p>
-<a class="header" href="#parameters-7" id="parameters-7"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-5" id="parameters-5"><h2>Parameters</h2></a>
 <p>(none)</p>
-<a class="header" href="#return-value-7" id="return-value-7"><h2>Return value</h2></a>
+<a class="header" href="#return-value-5" id="return-value-5"><h2>Return value</h2></a>
 <p>Reference to the last element.</p>
-<a class="header" href="#complexity-7" id="complexity-7"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-5" id="complexity-5"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#notes-5" id="notes-5"><h2>Notes</h2></a>
+<a class="header" href="#notes-3" id="notes-3"><h2>Notes</h2></a>
 <p>The element returned is the last element that has been pushed.</p>
-<a class="header" href="#example-7" id="example-7"><h2>Example</h2></a>
+<a class="header" href="#example-5" id="example-5"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -387,7 +376,7 @@ int main() {
 <p>Output:</p>
 <pre><code>The last element is 2
 </code></pre>
-<a class="header" href="#see-also-7" id="see-also-7"><h2>See also</h2></a>
+<a class="header" href="#see-also-5" id="see-also-5"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="front.html">front</a> </td><td> Access the first element </td></tr>
 </tbody></table>
@@ -397,17 +386,17 @@ constexpr reference at(size_type index);
 </code></pre>
 <p>Returns the number a reference to the element at the index specified.
 If the index is not within the range [0, size()), an exception of type <code>std::out_of_range</code> is thrown.</p>
-<a class="header" href="#parameters-8" id="parameters-8"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-6" id="parameters-6"><h2>Parameters</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> index </td><td> index of the element to return </td></tr>
 </tbody></table>
-<a class="header" href="#return-value-8" id="return-value-8"><h2>Return value</h2></a>
+<a class="header" href="#return-value-6" id="return-value-6"><h2>Return value</h2></a>
 <p>Reference to the requested element.</p>
 <a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
 <p><code>std::out_of_range</code> if <code>index &gt;= size()</code>.</p>
-<a class="header" href="#complexity-8" id="complexity-8"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-6" id="complexity-6"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#example-8" id="example-8"><h2>Example</h2></a>
+<a class="header" href="#example-6" id="example-6"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -419,7 +408,7 @@ int main() {
 <p>Output:</p>
 <pre><code>The second element is 1
 </code></pre>
-<a class="header" href="#see-also-8" id="see-also-8"><h2>See also</h2></a>
+<a class="header" href="#see-also-6" id="see-also-6"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="operator.html">operator []</a> </td><td> Access specified element without bounds checking </td></tr>
 </tbody></table>
@@ -428,15 +417,15 @@ int main() {
 constexpr reference operator[](size_type index) noexcept;
 </code></pre>
 <p>Returns the number a reference to the element at the index specified.</p>
-<a class="header" href="#parameters-9" id="parameters-9"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-7" id="parameters-7"><h2>Parameters</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> index </td><td> index of the element to return </td></tr>
 </tbody></table>
-<a class="header" href="#return-value-9" id="return-value-9"><h2>Return value</h2></a>
+<a class="header" href="#return-value-7" id="return-value-7"><h2>Return value</h2></a>
 <p>Reference to the requested element.</p>
-<a class="header" href="#complexity-9" id="complexity-9"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-7" id="complexity-7"><h2>Complexity</h2></a>
 <p>Constant.</p>
-<a class="header" href="#example-9" id="example-9"><h2>Example</h2></a>
+<a class="header" href="#example-7" id="example-7"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -448,22 +437,30 @@ int main() {
 <p>Output:</p>
 <pre><code>The second element is 1
 </code></pre>
-<a class="header" href="#see-also-9" id="see-also-9"><h2>See also</h2></a>
+<a class="header" href="#see-also-7" id="see-also-7"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="at.html">at</a> </td><td> Access specified element with bounds checking </td></tr>
+</tbody></table>
+<a class="header" href="#modifier" id="modifier"><h1>Modifier</h1></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="modifier/clear.html">clear</a> </td><td> Clear the content </td></tr>
+<tr><td align="right"> <a href="modifier/emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
+<tr><td align="right"> <a href="modifier/pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
+<tr><td align="right"> <a href="modifier/push_back.html">push_back</a> </td><td> Insert an element to the end </td></tr>
+<tr><td align="right"> <a href="modifier/swap.html">swap</a> </td><td> Swaps the contents </td></tr>
 </tbody></table>
 <a class="header" href="#hazsharedqueueclear" id="hazsharedqueueclear"><h1><strong>haz::SharedQueue::clear</strong></h1></a>
 <pre><code class="language-cpp">constexpr void clear() noexcept;
 </code></pre>
 <p>Remove all elements of the container. After that <code>size()</code> returns 0.
 Invalidate all iterators, references and pointers.</p>
-<a class="header" href="#parameters-10" id="parameters-10"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-8" id="parameters-8"><h2>Parameters</h2></a>
 <p>(none)</p>
-<a class="header" href="#return-value-10" id="return-value-10"><h2>Return value</h2></a>
+<a class="header" href="#return-value-8" id="return-value-8"><h2>Return value</h2></a>
 <p>(none)</p>
-<a class="header" href="#complexity-10" id="complexity-10"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-8" id="complexity-8"><h2>Complexity</h2></a>
 <p>Constant if the elements are trivially destructible, otherwise linear in the size of the container.</p>
-<a class="header" href="#example-10" id="example-10"><h2>Example</h2></a>
+<a class="header" href="#example-8" id="example-8"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 
@@ -478,37 +475,7 @@ int main() {
 <pre><code>Size before : 3
 Size afer : 0
 </code></pre>
-<a class="header" href="#see-also-10" id="see-also-10"><h2>See also</h2></a>
-<table><thead><tr></tr></thead><tbody>
-<tr><td align="right"> <a href="pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
-</tbody></table>
-<a class="header" href="#hazsharedqueueclear-1" id="hazsharedqueueclear-1"><h1><strong>haz::SharedQueue::clear</strong></h1></a>
-<pre><code class="language-cpp">constexpr void clear() noexcept;
-</code></pre>
-<p>Remove all elements of the container. After that <code>size()</code> returns 0.
-Invalidate all iterators, references and pointers.</p>
-<a class="header" href="#parameters-11" id="parameters-11"><h2>Parameters</h2></a>
-<p>(none)</p>
-<a class="header" href="#return-value-11" id="return-value-11"><h2>Return value</h2></a>
-<p>(none)</p>
-<a class="header" href="#complexity-11" id="complexity-11"><h2>Complexity</h2></a>
-<p>Constant if the elements are trivially destructible, otherwise linear in the size of the container.</p>
-<a class="header" href="#example-11" id="example-11"><h2>Example</h2></a>
-<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
-#include &lt;iostream&gt;
-
-int main() {
-    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2 };
-    std::cout &lt;&lt; &quot;Size before : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
-    queue.clear();
-    std::cout &lt;&lt; &quot;Size after : &quot; &lt;&lt; queue.size() &lt;&lt; '\n';
-}
-</code></pre>
-<p>Output:</p>
-<pre><code>Size before : 3
-Size afer : 0
-</code></pre>
-<a class="header" href="#see-also-11" id="see-also-11"><h2>See also</h2></a>
+<a class="header" href="#see-also-8" id="see-also-8"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="pop_front.html">pop_front</a> </td><td> Pop the first element </td></tr>
 </tbody></table>
@@ -521,20 +488,20 @@ void push_back(T&amp;&amp; value);          (2)
     (2) <code>value</code> is moved into the new element</p>
 <p>All iterators past-the-end, end included, are invalidated. No reference are invalidated.
 If the container is full, i.e. <code>size() == max_size()</code> then the behaviour is undefined.</p>
-<a class="header" href="#parameters-12" id="parameters-12"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-9" id="parameters-9"><h2>Parameters</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> value </td><td> the value of the element to append </td></tr>
 </tbody></table>
 <a class="header" href="#type-requirement" id="type-requirement"><h3>Type requirement</h3></a>
 <p><code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/CopyInsertable">CopyInsertable</a></em> in order to use overload (1).<br />
 <code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/MoveInsertable">MoveInsertable</a></em> in order to use overload (2).</p>
-<a class="header" href="#return-value-12" id="return-value-12"><h2>Return value</h2></a>
+<a class="header" href="#return-value-9" id="return-value-9"><h2>Return value</h2></a>
 <p>(none)</p>
-<a class="header" href="#complexity-12" id="complexity-12"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-9" id="complexity-9"><h2>Complexity</h2></a>
 <p>Constant.</p>
 <a class="header" href="#exception-1" id="exception-1"><h2>Exception</h2></a>
 <p>If an exception is thrown, this function has no effect (strong exception guarantee).</p>
-<a class="header" href="#example-12" id="example-12"><h2>Example</h2></a>
+<a class="header" href="#example-9" id="example-9"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -558,11 +525,54 @@ int main() {
 &quot;abc&quot;
 &quot;def&quot;
 </code></pre>
-<a class="header" href="#see-also-12" id="see-also-12"><h2>See also</h2></a>
+<a class="header" href="#see-also-9" id="see-also-9"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="emplace_back.html">emplace_back</a> </td><td> Construct an element in-place at the end </td></tr>
 </tbody></table>
-<a class="header" href="#pop_front" id="pop_front"><h1>pop_front</h1></a>
+<a class="header" href="#hazsharedqueuepop_front" id="hazsharedqueuepop_front"><h1><strong>haz::SharedQueue::pop_front</strong></h1></a>
+<pre><code class="language-cpp">constexpr void pop_front() noexcept;
+</code></pre>
+<p>Removes the first element of the container. If there are no elements in the container, the behaviour is undefined.
+Iterator and reference to the erased element are invalidated. The other are not unless the container is now empty.</p>
+<a class="header" href="#parameters-10" id="parameters-10"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-10" id="return-value-10"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity-10" id="complexity-10"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-10" id="example-10"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto i : queue) {
+        std::cout &lt;&lt; i &lt;&lt; '\n';
+    }
+
+    std::cout &lt;&lt; &quot;Pop 2 values\n&quot;;
+    queue.pop_front();
+    queue.pop_front();
+
+    std::cout &lt;&lt; &quot;Contents:\n&quot;;
+    for(auto i : queue) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents:
+0, 1, 2, 3,
+Pop 2 values
+Contents:
+2, 3,
+</code></pre>
+<a class="header" href="#see-also-10" id="see-also-10"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="clear.html">clear</a> </td><td> Clear the content </td></tr>
+</tbody></table>
 <a class="header" href="#hazsharedqueueemplace_back" id="hazsharedqueueemplace_back"><h1><strong>haz::SharedQueue::emplace_back</strong></h1></a>
 <pre><code class="language-cpp">template&lt;typename...Args&gt;
 reference emplace_back(Args&amp;&amp;... args);
@@ -570,19 +580,19 @@ reference emplace_back(Args&amp;&amp;... args);
 <p>Construct a new element at the end of the container. The element is constructed in place using placement-new. The arguments <code>args...</code> are forwarded to the constructor using <code>std::forward&lt;Args&gt;(args)...</code>.
 All iterators past-the-end, end included, are invalidated. No reference are invalidated.
 If the container is full, i.e. <code>size() == max_size()</code> then the behaviour is undefined.</p>
-<a class="header" href="#parameters-13" id="parameters-13"><h2>Parameters</h2></a>
+<a class="header" href="#parameters-11" id="parameters-11"><h2>Parameters</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> args </td><td> arguments to forward to the constructor of the element </td></tr>
 </tbody></table>
 <a class="header" href="#type-requirement-1" id="type-requirement-1"><h3>Type requirement</h3></a>
 <p>T (the container's element type) must meet the requirement of <em><a href="https://en.cppreference.com/w/cpp/named_req/EmplaceConstructible">EmplaceConstructible</a></em>.</p>
-<a class="header" href="#return-value-13" id="return-value-13"><h2>Return value</h2></a>
+<a class="header" href="#return-value-11" id="return-value-11"><h2>Return value</h2></a>
 <p>Reference to the inserted element.</p>
-<a class="header" href="#complexity-13" id="complexity-13"><h2>Complexity</h2></a>
+<a class="header" href="#complexity-11" id="complexity-11"><h2>Complexity</h2></a>
 <p>Constant.</p>
 <a class="header" href="#exception-2" id="exception-2"><h2>Exception</h2></a>
 <p>If an exception is thrown, this function has no effect (strong exception guarantee).</p>
-<a class="header" href="#example-13" id="example-13"><h2>Example</h2></a>
+<a class="header" href="#example-11" id="example-11"><h2>Example</h2></a>
 <pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
 #include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -629,19 +639,309 @@ Contents:
 John is 32
 Bob is 47
 </code></pre>
-<a class="header" href="#see-also-13" id="see-also-13"><h2>See also</h2></a>
+<a class="header" href="#see-also-11" id="see-also-11"><h2>See also</h2></a>
 <table><thead><tr></tr></thead><tbody>
 <tr><td align="right"> <a href="push_back.html">push_back</a> </td><td> Insert an element to the end </td></tr>
 </tbody></table>
-<a class="header" href="#swap" id="swap"><h1>swap</h1></a>
-<a class="header" href="#begin-cbegin" id="begin-cbegin"><h1>begin, cbegin</h1></a>
-<a class="header" href="#begin-cbegin-1" id="begin-cbegin-1"><h1>begin, cbegin</h1></a>
-<a class="header" href="#end-cend" id="end-cend"><h1>end, cend</h1></a>
-<a class="header" href="#rbegin-crbegin" id="rbegin-crbegin"><h1>rbegin, crbegin</h1></a>
-<a class="header" href="#rend-crend" id="rend-crend"><h1>rend, crend</h1></a>
-<a class="header" href="#operator------" id="operator------"><h1>operator ==, !=, &lt;, &lt;=, &gt;, &gt;=</h1></a>
-<a class="header" href="#operator-------1" id="operator-------1"><h1>operator ==, !=, &lt;, &lt;=, &gt;, &gt;=</h1></a>
-<a class="header" href="#stdswap" id="stdswap"><h1>std::swap</h1></a>
+<a class="header" href="#hazsharedqueueswap" id="hazsharedqueueswap"><h1><strong>haz::SharedQueue::swap</strong></h1></a>
+<pre><code class="language-cpp">constexpr void swap(SharedQueue&amp; other) noexcept(/* see below */);
+</code></pre>
+<p>Exchanges the contents of the container with those of other. Does not cause iterators and references to associate with the other container.</p>
+<a class="header" href="#parameters-12" id="parameters-12"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> other </td><td> Container to exchange the contents with </td></tr>
+</tbody></table>
+<a class="header" href="#return-value-12" id="return-value-12"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#exception-3" id="exception-3"><h2>Exception</h2></a>
+<blockquote>
+<p><strong>noexcept specification:</strong>
+<code>noexcept(is_nothrow_swappable_v&lt;T&gt;)</code></p>
+</blockquote>
+<a class="header" href="#complexity-12" id="complexity-12"><h2>Complexity</h2></a>
+<p>Linear in the size of the container.</p>
+<a class="header" href="#example-12" id="example-12"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue_a{ 0, 1, 2, 3 };
+    haz::SharedQueue&lt;int, 10&gt; queue_b{ 4, 5, 6 };
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+
+    std::cout &lt;&lt; &quot;Swap\n&quot;;
+    queue_a.swap(queue_b);
+
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents of A:
+0, 1, 2, 3,
+Contents of B:
+4, 5, 6,
+Swap
+Contents of A:
+4, 5, 6,
+Contents of B:
+0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also-12" id="see-also-12"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="clear.html">clear</a> </td><td> Clear the content </td></tr>
+</tbody></table>
+<a class="header" href="#iterators-1" id="iterators-1"><h1>Iterators</h1></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="iterators/begin.html">begin, cbegin</a> </td><td> Returns an iterator to the beginning </td></tr>
+<tr><td align="right"> <a href="iterators/end.html">end, cend</a> </td><td> Returns an iterator to the end </td></tr>
+<tr><td align="right"> <a href="iterators/rbegin.html">rbegin, crbegin</a> </td><td> Returns a reverse iterator to the beginning </td></tr>
+<tr><td align="right"> <a href="iterators/end.html">end, cend</a> </td><td> Returns a reverse iterator to the end </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueuebegin-hazsharedqueuecbegin" id="hazsharedqueuebegin-hazsharedqueuecbegin"><h1><strong>haz::SharedQueue::begin, haz::SharedQueue::cbegin</strong></h1></a>
+<pre><code class="language-cpp">constexpr iterator begin() noexcept();
+constexpr const_iterator begin() const noexcept();
+constexpr const_iterator cbegin() const noexcept();
+</code></pre>
+<p>Returns an iterator to the first element of the container.
+If the container is empty, the returned iterator will be equal to <code>end()</code></p>
+<a class="header" href="#parameters-13" id="parameters-13"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-13" id="return-value-13"><h2>Return value</h2></a>
+<p>Iterator to the first element.</p>
+<a class="header" href="#complexity-13" id="complexity-13"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-13" id="example-13"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    for(typename haz::SharedQueue&lt;int, 10&gt;::iterator it = queue.begin(); it != queue.end(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; &quot;, &quot;;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also-13" id="see-also-13"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="end.html">end, cend</a> </td><td> Returns an iterator to the end </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueueend-hazsharedqueuecend" id="hazsharedqueueend-hazsharedqueuecend"><h1><strong>haz::SharedQueue::end, haz::SharedQueue::cend</strong></h1></a>
+<pre><code class="language-cpp">constexpr iterator end() noexcept();
+constexpr const_iterator end() const noexcept();
+constexpr const_iterator cend() const noexcept();
+</code></pre>
+<p>Returns an iterator to the element following the last element of the container. This element acts as a placeholder; attempting to access it results in undefined behaviour, it is not dereferencable.</p>
+<a class="header" href="#parameters-14" id="parameters-14"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-14" id="return-value-14"><h2>Return value</h2></a>
+<p>Iterator to the element following the last element.</p>
+<a class="header" href="#complexity-14" id="complexity-14"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-14" id="example-14"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    for(typename haz::SharedQueue&lt;int, 10&gt;::iterator it = queue.begin(); it != queue.end(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; &quot;, &quot;;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also-14" id="see-also-14"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="begin.html">begin, cbegin</a> </td><td> Returns an iterator to the beginning </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueuerbegin-hazsharedqueuecrbegin" id="hazsharedqueuerbegin-hazsharedqueuecrbegin"><h1><strong>haz::SharedQueue::rbegin, haz::SharedQueue::crbegin</strong></h1></a>
+<pre><code class="language-cpp">constexpr reverse_iterator rbegin() noexcept();
+constexpr const_reverse_iterator rbegin() const noexcept();
+constexpr const_reverse_iterator crbegin() const noexcept();
+</code></pre>
+<p>Returns an iterator to the first element of the reversed container. It corresponds to the last element of the non-reversed container.
+If the container is empty, the returned iterator will be equal to <code>rend()</code></p>
+<a class="header" href="#parameters-15" id="parameters-15"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-15" id="return-value-15"><h2>Return value</h2></a>
+<p>Reverse iterator to the first element.</p>
+<a class="header" href="#complexity-15" id="complexity-15"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-15" id="example-15"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    for(typename haz::SharedQueue&lt;int, 10&gt;::reverse_iterator it = queue.rbegin(); it != queue.rend(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; &quot;, &quot;;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>3, 2, 1, 0,
+</code></pre>
+<a class="header" href="#see-also-15" id="see-also-15"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="rend.html">rend, crend</a> </td><td> Returns a reverse iterator to the end </td></tr>
+</tbody></table>
+<a class="header" href="#hazsharedqueuerend-hazsharedqueuecrend" id="hazsharedqueuerend-hazsharedqueuecrend"><h1><strong>haz::SharedQueue::rend, haz::SharedQueue::crend</strong></h1></a>
+<pre><code class="language-cpp">constexpr reverse_iterator rend() noexcept();
+constexpr const_reverse_iterator rend() const noexcept();
+constexpr const_reverse_iterator crend() const noexcept();
+</code></pre>
+<p>Returns a reverse iterator to the element following the last element of the reversed container. It corresponds to the element preceding the first element of the non-reversed container. This element acts as a placeholder; attempting to access it results in undefined behaviour, it is not dereferencable.</p>
+<a class="header" href="#parameters-16" id="parameters-16"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value-16" id="return-value-16"><h2>Return value</h2></a>
+<p>reverse iterator to the element following the last element.</p>
+<a class="header" href="#complexity-16" id="complexity-16"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example-16" id="example-16"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    for(typename haz::SharedQueue&lt;int, 10&gt;::reverse_iterator it = queue.rbegin(); it != queue.rend(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; &quot;, &quot;;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>3, 2, 1, 0,
+</code></pre>
+<a class="header" href="#see-also-16" id="see-also-16"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="begin.html">rbegin, crbegin</a> </td><td> Returns a reverse iterator to the beginning </td></tr>
+</tbody></table>
+<a class="header" href="#non-member-fucntions" id="non-member-fucntions"><h1>Non-member fucntions</h1></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="non_member/compare.html">operator ==, !=, &lt;=, &gt;=, &lt;, &gt;</a> </td><td> Lexicograpically compares the values </td></tr>
+<tr><td align="right"> <a href="non_member/swap.html">std::swap</a> </td><td> specialize the <code>std::swap</code> algorithm </td></tr>
+</tbody></table>
+<a class="header" href="#operator------hazsharedqueue" id="operator------hazsharedqueue"><h1><strong>operator==, !=, &lt;, &lt;=, &gt;, &gt;= (haz::SharedQueue)</strong></h1></a>
+<pre><code class="language-cpp">template&lt;typename T, std::size_t N&gt;
+constexpr bool operator==(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (1)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator!=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (2)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&lt;(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (3)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&lt;=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (4)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&gt;(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (5)
+template&lt;typename T, std::size_t N&gt;
+constexpr bool operator&gt;=(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept();         (6)
+</code></pre>
+<p>Compare the contents of two queue.
+    (1-2) Checks if the contents of <code>lhs</code> and <code>rhs</code> are equal, that is, whether each element in <code>lhs</code> compares equals with the element in <code>rhs</code> at the same position.
+    (3-6) Compares the contents of <code>lhs</code> and <code>rhs</code> lexicographically. The comparaison is performed by a function equivalent to <code>std::lexicographical_compare</code>.</p>
+<a class="header" href="#parameters-17" id="parameters-17"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> lhs, rhs </td><td> Containers whose contents to compare </td></tr>
+</tbody></table>
+<a class="header" href="#type-requirement-2" id="type-requirement-2"><h3>Type requirement</h3></a>
+<p><code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/EqualityComparable">EqualityComparable</a></em> in order to use overload (1-2).<br />
+<code>T</code> must meet the requirements of <em><a href="https://en.cppreference.com/w/cpp/named_req/LessThanComparable">LessThanComparable</a></em> in order to use overload (3-6).</p>
+<a class="header" href="#return-value-17" id="return-value-17"><h2>Return value</h2></a>
+<p>(1) <code>true</code> if the contents of the containers are equal, <code>false</code> otherwise.<br />
+(2) <code>true</code> if the contents of the containers are not equal, <code>false</code> otherwise.<br />
+(3) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>less</em> than the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(4) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>less than or equal</em> the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(5) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>greater</em> than the contents of <code>rhs</code>, <code>false</code> otherwise.<br />
+(6) <code>true</code> if the contents of the <code>lhs</code> are lexicographically <em>greater than or equal</em> the contents of <code>rhs</code>, <code>false</code> otherwise.</p>
+<a class="header" href="#complexity-17" id="complexity-17"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#stdswap-hazsharedqueue" id="stdswap-hazsharedqueue"><h1><strong>std::swap (haz::SharedQueue)</strong></h1></a>
+<pre><code class="language-cpp">template&lt;typename T, std::size_t N&gt;
+void swap(haz::SharedQueue&lt;T, N&gt; const&amp; lhs, haz::SharedQueue&lt;T, N&gt; const&amp; rhs) noexcept(/* see below */);
+</code></pre>
+<p>Specialize the <code>std::swap</code> algorithm for <code>haz::SharedQueue</code>. Swaps the contents of <code>lhs</code> and <code>rhs</code>. Calls <code>lhs.swap(rhs)</code>.</p>
+<a class="header" href="#parameters-18" id="parameters-18"><h2>Parameters</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> lhs, rhs </td><td> Containers whose contents to swap </td></tr>
+</tbody></table>
+<a class="header" href="#return-value-18" id="return-value-18"><h2>Return value</h2></a>
+<p>(none)</p>
+<a class="header" href="#complexity-18" id="complexity-18"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#exceptions" id="exceptions"><h2>Exceptions</h2></a>
+<blockquote>
+<p><strong>noexcept specification:</strong>
+noexcept(noexcept(lhs.swap(rhs)))</p>
+</blockquote>
+<a class="header" href="#example-17" id="example-17"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue_a{ 0, 1, 2, 3 };
+    haz::SharedQueue&lt;int, 10&gt; queue_b{ 4, 5, 6 };
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+
+    std::cout &lt;&lt; &quot;Swap\n&quot;;
+    std::swap(queue_a, queue_b);
+
+    std::cout &lt;&lt; &quot;Contents of A:\n&quot;;
+    for(auto i : queue_a) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Contents of B:\n&quot;;
+    for(auto i : queue_b) {
+        std::cout &lt;&lt; i &lt;&lt; &quot;, &quot;;
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>Contents of A:
+0, 1, 2, 3,
+Contents of B:
+4, 5, 6,
+Swap
+Contents of A:
+4, 5, 6,
+Contents of B:
+0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also-17" id="see-also-17"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"><a href="../modifier/swap.html">swap</a></td><td> Swaps the contents </td></tr>
+</tbody></table>
 <a class="header" href="#acquire_lock" id="acquire_lock"><h1>acquire_lock</h1></a>
 <a class="header" href="#acquire_lock-1" id="acquire_lock-1"><h1>acquire_lock</h1></a>
 <a class="header" href="#wait_not_empty" id="wait_not_empty"><h1>wait_not_empty</h1></a>

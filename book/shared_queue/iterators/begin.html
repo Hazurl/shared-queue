@@ -136,7 +136,37 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#begin-cbegin" id="begin-cbegin"><h1>begin, cbegin</h1></a>
+                        <a class="header" href="#hazsharedqueuebegin-hazsharedqueuecbegin" id="hazsharedqueuebegin-hazsharedqueuecbegin"><h1><strong>haz::SharedQueue::begin, haz::SharedQueue::cbegin</strong></h1></a>
+<pre><code class="language-cpp">constexpr iterator begin() noexcept();
+constexpr const_iterator begin() const noexcept();
+constexpr const_iterator cbegin() const noexcept();
+</code></pre>
+<p>Returns an iterator to the first element of the container.
+If the container is empty, the returned iterator will be equal to <code>end()</code></p>
+<a class="header" href="#parameters" id="parameters"><h2>Parameters</h2></a>
+<p>(none)</p>
+<a class="header" href="#return-value" id="return-value"><h2>Return value</h2></a>
+<p>Iterator to the first element.</p>
+<a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
+<p>Constant.</p>
+<a class="header" href="#example" id="example"><h2>Example</h2></a>
+<pre><code class="language-cpp">#include &lt;haz/SharedQueue.hpp&gt;
+#include &lt;iostream&gt;
+
+int main() {
+    haz::SharedQueue&lt;int, 10&gt; queue{ 0, 1, 2, 3 };
+    for(typename haz::SharedQueue&lt;int, 10&gt;::iterator it = queue.begin(); it != queue.end(); ++it)
+        std::cout &lt;&lt; *it &lt;&lt; &quot;, &quot;;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>Output:</p>
+<pre><code>0, 1, 2, 3,
+</code></pre>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<table><thead><tr></tr></thead><tbody>
+<tr><td align="right"> <a href="end.html">end, cend</a> </td><td> Returns an iterator to the end </td></tr>
+</tbody></table>
 
                     </main>
 
