@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 
+#include <haz/Iterators.hpp>
 #include <haz/Out.hpp>
 
 namespace haz {
@@ -21,10 +22,10 @@ public:
     using pointer = T*;
     using const_pointer = T const*;
 
-    using iterator = void;
-    using const_iterator = void;
-    using reverse_iterator = void;
-    using const_reverse_iterator = void;
+    using iterator = Iterator<T, S, true>;
+    using const_iterator = Iterator<const T, S, true>;
+    using reverse_iterator = Iterator<T, S, false>;
+    using const_reverse_iterator = Iterator<const T, S, false>;
 
 
 
@@ -59,18 +60,18 @@ public:
     /* Element Access */
 
     constexpr const_reference front() const noexcept {
-        return _data[_front].get();
+        return _data[_front].value;
     }
     constexpr reference  front() noexcept {
-        return _data[_front].get();
+        return _data[_front].value;
     }
 
 
     constexpr const_reference back() const noexcept {
-        return _data[_back].get();
+        return _data[(_back + S - 1) % S].value;
     }
     constexpr reference back() noexcept {
-        return _data[_back].get();
+        return _data[(_back + S - 1) % S].value;
     }
 
 
@@ -79,22 +80,22 @@ public:
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
 
-        return _data[(_front + index) % S].get();
+        return _data[(_front + index) % S].value;
     }
     constexpr reference at(size_type index) {
         if (index >= size()) {
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
 
-        return _data[(_front + index) % S].get();
+        return _data[(_front + index) % S].value;
     }
 
 
     constexpr const_reference operator[](size_type index) const noexcept {
-        return _data[(_front + index) % S].get();
+        return _data[(_front + index) % S].value;
     }
     constexpr reference operator[](size_type index) noexcept {
-        return _data[(_front + index) % S].get();
+        return _data[(_front + index) % S].value;
     }
 
 
@@ -126,12 +127,12 @@ public:
     }
 
 
-    constexpr void push(T const& value) noexcept(noexcept(T(value))) {
+    constexpr void push_back(T const& value) noexcept(noexcept(T(value))) {
         _data[_back].construct(value);
         _back = (_back + 1) % max_size();
         ++_size;
     }
-    constexpr void push(T&& value) noexcept(noexcept(T(std::move(value)))) {
+    constexpr void push_back(T&& value) noexcept(noexcept(T(std::move(value)))) {
         _data[_back].construct(std::move(value));
         _back = (_back + 1) % max_size();
         ++_size;
@@ -149,8 +150,8 @@ public:
 
     constexpr void pop_front() noexcept {
         --_size;
-        _data[_back].destruct();
-        _back = (_back + max_size() - 1) % max_size();
+        _data[_front].destruct();
+        _front = (_front + 1) % max_size();
     }
 
 
@@ -162,43 +163,59 @@ public:
     }
 
 
-    T&       top()       { return data[first]; };
-    T const& top() const { return data[first]; };
+    /* Iterators */
 
-    void pop() {
-        --cur_size;
-        first = (first + 1) % S;
-        not_full_cv.notify_one();
+    constexpr iterator begin() noexcept {
+        std::cout << "# new " << _front << '\n';
+        return iterator(_data.data(), _front);
+    }
+    constexpr const_iterator begin() const noexcept {
+        return const_iterator(_data.data(), _front);
+    }
+    constexpr const_iterator cbegin() const noexcept {
+        return begin();
+    }
+    
+
+    constexpr iterator end() noexcept {
+        std::cout << "# new end " << _front + _size << '\n';
+        return iterator(_data.data(), _front + _size);
+    }
+    constexpr const_iterator end() const noexcept {
+        return const_iterator(_data.data(), _front + _size);
+    }
+    constexpr const_iterator cend() const noexcept {
+        return end();
     }
 
-    void push(T const& t) {
-        if (cur_size >= S)
-            return;
+    constexpr reverse_iterator rbegin() noexcept {
+        return reverse_iterator(_data.data(), (_front + _size) % max_size());
+    }
+    constexpr const_reverse_iterator rbegin() const noexcept {
+        return const_reverse_iterator(_data.data(), (_front + max_size() - 1) % max_size());
+    }
+    constexpr const_reverse_iterator crbegin() const noexcept {
+        return rbegin();
+    }
+    
 
-        ++cur_size;
-        data[last] = t;
-        last = (last + 1) % S;
-        not_empty_cv.notify_one();
+    constexpr reverse_iterator rend() noexcept {
+        return reverse_iterator(_data.data(), (_front + _size) % max_size());
+    }
+    constexpr const_reverse_iterator rend() const noexcept {
+        return const_reverse_iterator(_data.data(), (_front + max_size() - 1) % max_size());
+    }
+    constexpr const_reverse_iterator crend() const noexcept {
+        return rend();
     }
 
-    std::size_t size() const {
-        return cur_size;
-    }
-
-    bool empty() const {
-        return cur_size == 0;
-    }
-
-    constexpr std::size_t capacity() const {
-        return S;
-    }
 
 private:
 
-    std::array<Manual<T>, S> data;
-    std::size_t first{0};
-    std::size_t last{0};
-    std::size_t cur_size{0};
+    std::array<Manual<T>, S> _data;
+    std::size_t _front{0};
+    std::size_t _back{0};
+    std::size_t _size{0};
 
 };
 

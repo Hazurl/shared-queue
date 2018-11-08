@@ -10,6 +10,7 @@
 #include <chrono>
 
 #include <haz/SharedQueue.hpp>
+#include <haz/Queue.hpp>
 #include <haz/Producer.hpp>
 #include <haz/Consumer.hpp>
 #include <haz/Out.hpp>

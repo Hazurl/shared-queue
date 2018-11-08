@@ -4,7 +4,7 @@
 
 namespace haz {
 
-template<typename T, std::size_t S>
+template<typename T, std::size_t S, bool forward>
 class Iterator {
 public:
 
@@ -18,23 +18,33 @@ public:
     using const_reference = reference const;
     using iterator_category = std::random_access_iterator_tag;
     using size_type = std::size_t;
-    using this_t = Iterator<T, S>;
+    using this_t = Iterator<T, S, forward>;
     using reference_this_t = this_t&;
-    using const_reference_this_t = reference_this_t const;
+    using const_reference_this_t = this_t const&;
+
+
+    /* Constructor */
+
+    constexpr Iterator(Manual<T>* data, size_type _index) noexcept : _data(data), _index(_index) {}
+    constexpr Iterator() noexcept : _data(nullptr), _index(0) {}
 
 
     /* Iterator requirement */
 
-    constexpr reference operator*() noexcept {
-        return _data[index];
-    }
-    constexpr const_reference operator*() const noexcept {
-        return _data[index];
+    constexpr reference operator*() const noexcept {
+        size_type wrapped = _index >= S ? _index - S : _index;
+        if constexpr (forward) {
+            std::cout << "# at " << wrapped << '\n';
+            return _data[wrapped].value;
+        } else {
+            std::cout << "# at " << S - 1 - wrapped << '\n';
+            return _data[S - 1 - wrapped].value;
+        }
     }
 
 
     constexpr reference_this_t operator++() noexcept {
-        index = (index + 1) % S;
+        ++_index;
         return *this;
     }
 
@@ -42,7 +52,7 @@ public:
 
     constexpr this_t operator++(int) noexcept {
         this_t last{ *this };
-        index = (index + 1) % S;
+        ++_index;
         return last;
     }
 
@@ -50,12 +60,12 @@ public:
     /* InputIterator requirement */
 
     constexpr bool operator==(const_reference_this_t other) const noexcept {
-        return index == other.index && _data == other._data;
+        return _index == other._index && _data == other._data;
     }
 
 
     constexpr bool operator!=(const_reference_this_t other) const noexcept {
-        return !(*this == *other);
+        return !(*this == other);
     }
 
 
@@ -70,14 +80,14 @@ public:
     /* BidirectionalIterator requirement */
 
     constexpr reference_this_t operator--() noexcept {
-        index = (index + S - 1) % S;
+        --_index;
         return *this;
     }
 
 
     constexpr this_t operator--(int) noexcept {
         this_t last{ *this };
-        index = (index + S - 1) % S;
+        --_index;
         return last;
     }
 
@@ -85,13 +95,13 @@ public:
     /* BidirectionalIterator requirement */
 
     constexpr reference_this_t operator+=(difference_type n) noexcept {
-        index = (index + S + n) % S;
+        _index += n;
         return *this;
     }
 
 
     constexpr reference_this_t operator-=(difference_type n) noexcept {
-        index = (index + S - n) % S;
+        _index -= n;
         return *this;
     }
 
@@ -109,16 +119,39 @@ public:
 
 
     constexpr difference_type operator-(const_reference_this_t other) const noexcept {
-        
+        return _index - other._index;        
+    }
+
+
+    constexpr reference operator[](difference_type n) const noexcept {
+        return *(*this + n);
+    }
+
+
+    constexpr bool operator<(const_reference_this_t other) const noexcept {
+        return _index < other._index;
+    }
+
+
+    constexpr bool operator>(const_reference_this_t other) const noexcept {
+        return _index > other._index;
+    }
+
+
+    constexpr bool operator<=(const_reference_this_t other) const noexcept {
+        return _index <= other._index;
+    }
+
+
+    constexpr bool operator>=(const_reference_this_t other) const noexcept {
+        return _index >= other._index;
     }
 
 
 private:
 
-    T* _data;
-    size_type index;
-    size_type _front;
-    size_type _size;
+    Manual<T>* _data;
+    size_type _index;
 
 };
 
