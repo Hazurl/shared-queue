@@ -75,6 +75,50 @@ int main() {
         std::cout << *it << ", ";
     }
     std::cout << '\n';
+    std::cout << '\n';
+
+    haz::Queue<int, size_max> other;
+    other.push_back(123456);
+    for(auto const& i : other) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n';
+    for(auto const& i : queue) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n' << "swap!\n";
+    std::swap(queue, other);
+    for(auto const& i : other) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n';
+    for(auto const& i : queue) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n' << "swap!\n";
+    queue.swap(other);
+    for(auto const& i : other) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n';
+    for(auto const& i : queue) {
+        std::cout << i << ", ";
+    }
+    std::cout << '\n';
+    std::cout << '\n';
+    
+    other.clear();
+    other.emplace_back(10);
+    other.push_back(11);
+    other.push_back(12);
+    other.push_back(13);
+
+    std::cout << "a < b:  " << (queue < other) << '\n';
+    std::cout << "a <= b: " << (queue <= other) << '\n';
+    std::cout << "a >= b: " << (queue >= other) << '\n';
+    std::cout << "a > b:  " << (queue > other) << '\n';
+    std::cout << "a == b: " << (queue == other) << '\n';
+    std::cout << "a != b: " << (queue != other) << '\n';
 
 }
 

@@ -158,7 +158,12 @@ public:
     }
 
 
-    constexpr void swap(reference_this_t other) noexcept {
+    constexpr void swap(reference_this_t other) 
+        noexcept(
+            noexcept(std::is_nothrow_swappable_v<decltype(other._front)>) && 
+            noexcept(std::is_nothrow_swappable_v<decltype(other._back)>) &&
+            noexcept(std::is_nothrow_swappable_v<decltype(other._size)>) && 
+            noexcept(std::is_nothrow_swappable_v<decltype(other._data)>)) {
         std::swap(_front, other._front);
         std::swap(_back, other._back);
         std::swap(_size, other._size);
@@ -169,7 +174,6 @@ public:
     /* Iterators */
 
     constexpr iterator begin() noexcept {
-        std::cout << "# new " << _front << '\n';
         return iterator(_data.data(), _front);
     }
     constexpr const_iterator begin() const noexcept {
@@ -181,7 +185,6 @@ public:
     
 
     constexpr iterator end() noexcept {
-        std::cout << "# new end " << _front + _size << '\n';
         return iterator(_data.data(), _front + _size);
     }
     constexpr const_iterator end() const noexcept {
@@ -215,7 +218,7 @@ public:
 
     /* Comparaison */
 
-    constexpr bool operator==(const_reference_this_t other) const {
+    constexpr bool operator==(const_reference_this_t other) const noexcept(noexcept(std::declval<T>() != std::declval<T>())) {
         // only constexpr in c++20
         // return std::equal(begin(), end(), other.begin(), other.end());
 
@@ -234,39 +237,42 @@ public:
     }
 
 
-    constexpr bool operator!=(const_reference_this_t other) const {
+    constexpr bool operator!=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() == std::declval<const_reference_this_t>())) {
         return !(*this == other);
     }
 
 
-    constexpr bool operator>(const_reference_this_t other) const {
-        if (other.size() != size()) {
-            return false;
-        }
+    constexpr bool operator<(const_reference_this_t other) const noexcept(noexcept(std::declval<T>() < std::declval<T>()) && noexcept(std::declval<T>() > std::declval<T>())) {
+        auto first1 = begin();
+        auto first2 = other.begin();
 
-        auto it = begin();
-        for(auto const& elem : other) {
-            if (*it++ <= elem) {
+        auto const last1 = end();
+        auto const last2 = other.end();
+
+        for(; (first1 != last1) && (first2 != last2); (++first1), (++first2)) {
+            if (*first1 < *first2) {
+                return true;
+            } else if (*first1 > *first2) {
                 return false;
             }
         }
 
-        return true;
+        return (first1 == last1) && (first2 != last2);
     }
 
 
-    constexpr bool operator>=(const_reference_this_t other) const {
-        return !(other > *this);
+    constexpr bool operator<=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+        return !(other < *this);
     }
 
 
-    constexpr bool operator<(const_reference_this_t other) const {
-        return other > *this;
+    constexpr bool operator>(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+        return other < *this;
     }
 
 
-    constexpr bool operator<=(const_reference_this_t other) const {
-        return !(*this > other);
+    constexpr bool operator>=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+        return !(*this < other);
     }
 
 
@@ -278,5 +284,14 @@ private:
     std::size_t _size{0};
 
 };
+
+}
+
+namespace std {
+
+template<typename T, std::size_t S>
+constexpr void swap(haz::Queue<T, S>& lhs, haz::Queue<T, S>& rhs) noexcept(noexcept(lhs.swap(rhs))) {
+    return lhs.swap(rhs);
+}
 
 }

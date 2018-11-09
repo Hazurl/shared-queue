@@ -22,10 +22,12 @@ public:
     using reference_this_t = this_t&;
     using const_reference_this_t = this_t const&;
 
+    using manual_t = std::conditional_t<std::is_const_v<T>, const Manual<std::remove_const_t<T>>, Manual<T>>;
+
 
     /* Constructor */
 
-    constexpr Iterator(Manual<T>* data, size_type _index) noexcept : _data(data), _index(_index) {}
+    constexpr Iterator(manual_t* data, size_type _index) noexcept : _data(data), _index(_index) {}
     constexpr Iterator() noexcept : _data(nullptr), _index(0) {}
 
 
@@ -34,10 +36,8 @@ public:
     constexpr reference operator*() const noexcept {
         size_type wrapped = _index >= S ? _index - S : _index;
         if constexpr (forward) {
-            std::cout << "# at " << wrapped << '\n';
             return _data[wrapped].value;
         } else {
-            std::cout << "# at " << S - 1 - wrapped << '\n';
             return _data[S - 1 - wrapped].value;
         }
     }
@@ -150,7 +150,7 @@ public:
 
 private:
 
-    Manual<T>* _data;
+    manual_t* _data;
     size_type _index;
 
 };
