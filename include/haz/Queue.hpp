@@ -27,6 +27,9 @@ public:
     using reverse_iterator = Iterator<T, S, false>;
     using const_reverse_iterator = Iterator<const T, S, false>;
 
+    using this_t = Queue<T, S>;
+    using reference_this_t = this_t&;
+    using const_reference_this_t = this_t const&;
 
 
     /* Capacity */
@@ -155,7 +158,7 @@ public:
     }
 
 
-    constexpr void swap(SharedQueue<T, S>& other) noexcept {
+    constexpr void swap(reference_this_t other) noexcept {
         std::swap(_front, other._front);
         std::swap(_back, other._back);
         std::swap(_size, other._size);
@@ -207,6 +210,63 @@ public:
     }
     constexpr const_reverse_iterator crend() const noexcept {
         return rend();
+    }
+
+
+    /* Comparaison */
+
+    constexpr bool operator==(const_reference_this_t other) const {
+        // only constexpr in c++20
+        // return std::equal(begin(), end(), other.begin(), other.end());
+
+        if (other.size() != size()) {
+            return false;
+        }
+
+        auto it = begin();
+        for(auto const& elem : other) {
+            if (elem != *it++) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    constexpr bool operator!=(const_reference_this_t other) const {
+        return !(*this == other);
+    }
+
+
+    constexpr bool operator>(const_reference_this_t other) const {
+        if (other.size() != size()) {
+            return false;
+        }
+
+        auto it = begin();
+        for(auto const& elem : other) {
+            if (*it++ <= elem) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    constexpr bool operator>=(const_reference_this_t other) const {
+        return !(other > *this);
+    }
+
+
+    constexpr bool operator<(const_reference_this_t other) const {
+        return other > *this;
+    }
+
+
+    constexpr bool operator<=(const_reference_this_t other) const {
+        return !(*this > other);
     }
 
 
