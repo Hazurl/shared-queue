@@ -1,33 +1,33 @@
 #pragma once
 
-#include <haz/Out.hpp>
+#include <new>
 
 namespace haz {
 
-template<typename T, std::size_t S, bool forward>
+template<typename T, typename C, std::size_t S, bool forward>
 class Iterator {
 public:
 
     /* Traits */
 
     using difference_type = std::ptrdiff_t;
-    using valut_type = T;
+    using value_type = T;
     using pointer = T*;
     using const_pointer = T const*;
     using reference = T&;
     using const_reference = reference const;
     using iterator_category = std::random_access_iterator_tag;
     using size_type = std::size_t;
-    using this_t = Iterator<T, S, forward>;
+    using this_t = Iterator<T, C, S, forward>;
     using reference_this_t = this_t&;
     using const_reference_this_t = this_t const&;
 
-    using manual_t = std::conditional_t<std::is_const_v<T>, const Manual<std::remove_const_t<T>>, Manual<T>>;
+    using container_type = C;
 
 
     /* Constructor */
 
-    constexpr Iterator(manual_t* data, size_type _index) noexcept : _data(data), _index(_index) {}
+    constexpr Iterator(container_type data, size_type _index) noexcept : _data(data), _index(_index) {}
     constexpr Iterator() noexcept : _data(nullptr), _index(0) {}
 
 
@@ -36,9 +36,9 @@ public:
     constexpr reference operator*() const noexcept {
         size_type wrapped = _index >= S ? _index - S : _index;
         if constexpr (forward) {
-            return _data[wrapped].value;
+            return get(wrapped);
         } else {
-            return _data[S - 1 - wrapped].value;
+            return get(S - 1 - wrapped);
         }
     }
 
@@ -150,7 +150,15 @@ public:
 
 private:
 
-    manual_t* _data;
+    constexpr reference get(std::size_t const idx) noexcept {
+        return *std::launder(reinterpret_cast<T*>(&_data[idx]));
+    }
+
+    constexpr const_reference get(std::size_t const idx) const noexcept {
+        return *std::launder(reinterpret_cast<T* const>(&_data[idx]));
+    }
+
+    container_type _data;
     size_type _index;
 
 };

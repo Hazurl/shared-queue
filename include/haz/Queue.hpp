@@ -2,6 +2,9 @@
 
 #include <array>
 #include <cstddef>
+#include <cassert>
+#include <memory>
+#include <new>
 
 #include <haz/Iterators.hpp>
 #include <haz/Out.hpp>
@@ -13,7 +16,8 @@ class Queue {
 public:
 
     /* Traits */
-    using container_type = std::array<Manual<T>, S>;
+    using manual_t = struct alignas(T) { std::byte byte[sizeof(T)]; };
+    using container_type = std::array<manual_t, S>;
     using size_type = std::size_t;
 
     using value_type = T;
@@ -22,15 +26,109 @@ public:
     using pointer = T*;
     using const_pointer = T const*;
 
-    using iterator = Iterator<T, S, true>;
-    using const_iterator = Iterator<const T, S, true>;
-    using reverse_iterator = Iterator<T, S, false>;
-    using const_reverse_iterator = Iterator<const T, S, false>;
+    using iterator = Iterator<T, manual_t*, S, true>;
+    using const_iterator = Iterator<const T, manual_t const*, S, true>;
+    using reverse_iterator = Iterator<T, manual_t*, S, false>;
+    using const_reverse_iterator = Iterator<const T, manual_t const*, S, false>;
 
     using this_t = Queue<T, S>;
     using reference_this_t = this_t&;
     using const_reference_this_t = this_t const&;
 
+
+    /* Constructors */
+
+    constexpr Queue() : _data{}, _front{0}, _back{_front}, _size{0} {
+        std::cerr << "\t|[Default Constructor]|\n";
+    }
+
+    constexpr Queue(size_type n) : _front{0}, _back{n}, _size{n} {
+        assert(n <= max_size());
+        if constexpr (!std::is_trivially_default_constructible_v<T>) {
+            std::uninitialized_default_construct_n(get(0), n);
+        }
+        std::cerr << "\t|[Copy-1 Constructor]|\n";
+    }
+
+    constexpr Queue(size_type n, T const& value) : _front{0}, _back{n}, _size{n} {
+        assert(n <= max_size());
+        for(size_type i{0}; i < n; ++i) {
+            std::uninitialized_default_construct_n(get(0), n);
+            construct(i, value);
+        }
+        std::cerr << "\t|[Copy-n Constructor]|\n";
+    }
+
+    template<typename It>
+    constexpr Queue(It first, It last) : Queue() {
+        for(; first != last; ++first) {
+            construct(_back, *first);
+            ++_back;
+            ++_size;
+        }
+        std::cerr << "\t|[Iterator Constructor]|\n";
+    }
+
+    template<typename R>
+    constexpr Queue(std::initializer_list<R> list) : Queue() {
+        std::cerr << "\t|[BEGIN Initializer List Constructor]|\n";
+        std::uninitialized_copy(std::begin(list), std::end(list), get(0));
+        _back = _size = list.size();
+        std::cerr << "\t|[Initializer List Constructor]|\n";
+    }
+
+
+    /* Specials Members */
+
+
+    ~Queue() {
+        clear();
+    }
+
+
+    constexpr Queue(const_reference_this_t other) : _front{other._front}, _back{other._back}, _size{other._size} {
+        std::uninitialized_copy(std::begin(other), std::end(other), get(0));
+        std::cerr << "\t|[Copy Constructor]|\n";
+    }
+
+    constexpr Queue(this_t&& other) : _front{other._front}, _back{other._back}, _size{other._size} {
+        std::cerr << "\t|[BEGIN Move Constructor]|\n";
+        std::uninitialized_move(std::begin(other), std::end(other), get(0));
+        std::cerr << "\t|[Move Constructor]|\n";
+    }
+
+    constexpr reference_this_t operator=(const_reference_this_t other) {
+        if (&other == this) return *this;
+
+        clear();
+        std::uninitialized_copy(std::begin(other), std::end(other), get(0));
+
+        _front = 0;
+        _back = _size = other._size;
+
+        std::cerr << "\t|[Copy operator=]|\n";
+        return *this;
+    }
+
+    constexpr reference_this_t operator=(this_t&& other) {
+        if (&other == this) return *this;
+
+        clear();
+        std::uninitialized_move(std::begin(other), std::end(other), get(0));
+
+        _front = 0;
+        _back = _size = other._size;
+
+        std::cerr << "\t|[Move operator=]|\n";
+        return *this;
+    }
+
+    constexpr reference_this_t operator=(std::initializer_list<T> list) {
+        clear();
+        for(auto&& elem : list) {
+            emplace_back(std::move(elem));
+        }
+    }
 
     /* Capacity */
 
@@ -63,18 +161,18 @@ public:
     /* Element Access */
 
     constexpr const_reference front() const noexcept {
-        return _data[_front].value;
+        return *get(_front);
     }
     constexpr reference  front() noexcept {
-        return _data[_front].value;
+        return *get(_front);
     }
 
 
     constexpr const_reference back() const noexcept {
-        return _data[(_back + S - 1) % S].value;
+        return *get((_back + S - 1) % S);
     }
     constexpr reference back() noexcept {
-        return _data[(_back + S - 1) % S].value;
+        return *get((_back + S - 1) % S);
     }
 
 
@@ -83,60 +181,52 @@ public:
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
 
-        return _data[(_front + index) % S].value;
+        return *get((_front + index) % S);
     }
     constexpr reference at(size_type index) {
         if (index >= size()) {
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
 
-        return _data[(_front + index) % S].value;
+        return *get((_front + index) % S);
     }
 
 
     constexpr const_reference operator[](size_type index) const noexcept {
-        return _data[(_front + index) % S].value;
+        return *get((_front + index) % S);
     }
     constexpr reference operator[](size_type index) noexcept {
-        return _data[(_front + index) % S].value;
+        return *get((_front + index) % S);
     }
 
 
     /* Modifier */
 
     constexpr void clear() noexcept {
-        if constexpr (std::is_trivially_destructible_v<T>) {
-            _size = 0;
-            _back = _front;
-        } else {
+        if constexpr (!std::is_trivially_destructible_v<T>) {
             if (_back < _front || (_back == _front && _size == max_size())) {
                 // [.. _back .. _front .. ]
 
                 // 0 -> _back
-                for(size_type pos{0}; pos < _back; ++pos) {
-                    _data[pos].destruct();
-                }
+                std::destroy_n(get(0), _back);
                 // _front -> S
-                for(size_type pos{_front}; pos < max_size(); ++pos) {
-                    _data[pos].destruct();
-                }
+                std::destroy_n(get(_front), max_size() - _front);
             } else {
                 // [ .. _front .. _back ..]
-                for(size_type pos{_front}; pos < _back; ++pos) {
-                    _data[pos].destruct();
-                }
+                std::destroy_n(get(_front), _back - _front);
             }
         }
+        _back = _front = _size = 0;
     }
 
 
     constexpr void push_back(T const& value) noexcept(noexcept(T(value))) {
-        _data[_back].construct(value);
+        construct(_back, value);
         _back = (_back + 1) % max_size();
         ++_size;
     }
     constexpr void push_back(T&& value) noexcept(noexcept(T(std::move(value)))) {
-        _data[_back].construct(std::move(value));
+        construct(_back, std::move(value));
         _back = (_back + 1) % max_size();
         ++_size;
     }
@@ -144,7 +234,7 @@ public:
 
     template<typename...Args>
     constexpr reference emplace_back(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
-        auto& ref = _data[_back].construct(std::forward<Args>(args)...);
+        auto& ref = construct(_back, std::forward<Args>(args)...);
         _back = (_back + 1) % max_size();
         ++_size;
         return ref;
@@ -153,7 +243,7 @@ public:
 
     constexpr void pop_front() noexcept {
         --_size;
-        _data[_front].destruct();
+        destruct(_front);
         _front = (_front + 1) % max_size();
     }
 
@@ -278,7 +368,25 @@ public:
 
 private:
 
-    std::array<Manual<T>, S> _data;
+    template<typename...Args>
+    constexpr reference construct(std::size_t const idx, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
+        return *new(get(idx)) T (std::forward<Args>(args)...);
+    }
+
+    constexpr void destruct(std::size_t const idx) noexcept {
+        std::destroy_at(get(idx));
+    }
+
+    constexpr pointer get(std::size_t const idx) noexcept {
+        return std::launder(reinterpret_cast<pointer>(std::addressof(_data[idx])));
+    }
+
+    constexpr const_pointer get(std::size_t const idx) const noexcept {
+        return std::launder(reinterpret_cast<const_pointer>(std::addressof(_data[idx])));
+    }
+
+
+    container_type _data;
     std::size_t _front{0};
     std::size_t _back{0};
     std::size_t _size{0};
