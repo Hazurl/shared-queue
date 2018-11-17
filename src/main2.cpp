@@ -17,31 +17,43 @@
 #include <haz/Out.hpp>
 #include <haz/Policy.hpp>
 
+static unsigned obs_ctr{0};
+static unsigned obs_dtr{0};
+static unsigned obs_agn{0};
 
 struct Observer {
     constexpr Observer() noexcept {
         std::cout << "[Default Constructor]\n";
+        ++obs_ctr;
     }
 
     ~Observer() noexcept {
         std::cout << "[Destructor]\n";
+        if (obs_dtr >= obs_ctr) {
+            std::cerr << "###########################\n/!\\ WTF ??? destructed more time than constructed\n";
+        }
+        ++obs_dtr;
     }
 
     Observer(Observer const&) noexcept {
         std::cout << "[Copy Constructor]\n";
+        ++obs_ctr;
     }
 
     Observer(Observer&&) noexcept {
         std::cout << "[Move Constructor]\n";
+        ++obs_ctr;
     }
 
     Observer& operator=(Observer const&) noexcept {
         std::cout << "[Copy operator=]\n";
+        ++obs_agn;
         return *this;
     }
 
     Observer& operator=(Observer&&) noexcept {
         std::cout << "[Move operator=]\n";
+        ++obs_agn;
         return *this;
     }
 
@@ -202,5 +214,12 @@ int main() {
     }
 
     std::cout << "\n";
+
+
+    if (obs_ctr != obs_dtr) {
+        std::cerr << "##############\n";
+        std::cerr << "/!\\ Constructs " << obs_ctr << " times but destructed " << obs_dtr << " times!\n";
+        std::cerr << "operator= used " << obs_agn << " times\n";
+    }
 }
 

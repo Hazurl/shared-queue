@@ -38,11 +38,12 @@ public:
 
     /* Constructors */
 
-    constexpr Queue() : _data{}, _front{0}, _back{_front}, _size{0} {
+    inline constexpr Queue() : _data{}, _front{0}, _back{_front}, _size{_back} {
         std::cerr << "\t|[Default Constructor]|\n";
     }
 
-    constexpr Queue(size_type n) : _front{0}, _back{n}, _size{n} {
+
+    inline constexpr Queue(size_type n) : _front{0}, _back{n}, _size{n} {
         assert(n <= max_size());
         if constexpr (!std::is_trivially_default_constructible_v<T>) {
             std::uninitialized_default_construct_n(get(0), n);
@@ -50,30 +51,31 @@ public:
         std::cerr << "\t|[Copy-1 Constructor]|\n";
     }
 
-    constexpr Queue(size_type n, T const& value) : _front{0}, _back{n}, _size{n} {
+
+    inline constexpr Queue(size_type n, T const& value) : _front{0}, _back{n}, _size{n} {
         assert(n <= max_size());
         for(size_type i{0}; i < n; ++i) {
-            std::uninitialized_default_construct_n(get(0), n);
             construct(i, value);
         }
         std::cerr << "\t|[Copy-n Constructor]|\n";
     }
 
+
     template<typename It>
     constexpr Queue(It first, It last) : Queue() {
         for(; first != last; ++first) {
-            construct(_back, *first);
-            ++_back;
-            ++_size;
+            construct(_back++, *first);
         }
+
+        _size = _back;
         std::cerr << "\t|[Iterator Constructor]|\n";
     }
 
+
     template<typename R>
-    constexpr Queue(std::initializer_list<R> list) : Queue() {
+    inline constexpr Queue(std::initializer_list<R> list) : _front{0} {
         std::cerr << "\t|[BEGIN Initializer List Constructor]|\n";
-        std::uninitialized_copy(std::begin(list), std::end(list), get(0));
-        _back = _size = list.size();
+        assign(std::begin(list), std::end(list));
         std::cerr << "\t|[Initializer List Constructor]|\n";
     }
 
@@ -86,16 +88,18 @@ public:
     }
 
 
-    constexpr Queue(const_reference_this_t other) : _front{other._front}, _back{other._back}, _size{other._size} {
+    inline constexpr Queue(const_reference_this_t other) : _front{0}, _back{other._size}, _size{other._size} {
         std::uninitialized_copy(std::begin(other), std::end(other), get(0));
         std::cerr << "\t|[Copy Constructor]|\n";
     }
 
-    constexpr Queue(this_t&& other) : _front{other._front}, _back{other._back}, _size{other._size} {
+
+    inline constexpr Queue(this_t&& other) : _front{0}, _back{other._size}, _size{other._size} {
         std::cerr << "\t|[BEGIN Move Constructor]|\n";
         std::uninitialized_move(std::begin(other), std::end(other), get(0));
         std::cerr << "\t|[Move Constructor]|\n";
     }
+
 
     constexpr reference_this_t operator=(const_reference_this_t other) {
         if (&other == this) return *this;
@@ -103,12 +107,12 @@ public:
         clear();
         std::uninitialized_copy(std::begin(other), std::end(other), get(0));
 
-        _front = 0;
         _back = _size = other._size;
 
         std::cerr << "\t|[Copy operator=]|\n";
         return *this;
     }
+
 
     constexpr reference_this_t operator=(this_t&& other) {
         if (&other == this) return *this;
@@ -116,43 +120,41 @@ public:
         clear();
         std::uninitialized_move(std::begin(other), std::end(other), get(0));
 
-        _front = 0;
         _back = _size = other._size;
 
         std::cerr << "\t|[Move operator=]|\n";
         return *this;
     }
 
-    constexpr reference_this_t operator=(std::initializer_list<T> list) {
-        clear();
-        for(auto&& elem : list) {
-            emplace_back(std::move(elem));
-        }
+
+    inline constexpr reference_this_t operator=(std::initializer_list<T> list) {
+        assign(std::begin(list), std::end(list));
     }
+
 
     /* Capacity */
 
-    constexpr size_type capacity() const noexcept {
+    inline constexpr size_type capacity() const noexcept {
         return S;
     }
 
 
-    constexpr size_type max_size() const noexcept {
+    inline constexpr size_type max_size() const noexcept {
         return S;
     }
 
 
-    constexpr size_type size() const noexcept {
+    inline constexpr size_type size() const noexcept {
         return _size;
     }
 
 
-    constexpr bool empty() const noexcept {
+    inline constexpr bool empty() const noexcept {
         return size() == 0;
     }
 
 
-    constexpr bool full() const noexcept {
+    inline constexpr bool full() const noexcept {
         return size() == max_size();
     }
 
@@ -160,30 +162,30 @@ public:
 
     /* Element Access */
 
-    constexpr const_reference front() const noexcept {
+    inline constexpr const_reference front() const noexcept {
         return *get(_front);
     }
-    constexpr reference  front() noexcept {
+    inline constexpr reference  front() noexcept {
         return *get(_front);
     }
 
 
-    constexpr const_reference back() const noexcept {
+    inline constexpr const_reference back() const noexcept {
         return *get((_back + S - 1) % S);
     }
-    constexpr reference back() noexcept {
+    inline constexpr reference back() noexcept {
         return *get((_back + S - 1) % S);
     }
 
 
-    constexpr const_reference at(size_type index) const {
+    inline constexpr const_reference at(size_type index) const {
         if (index >= size()) {
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
 
         return *get((_front + index) % S);
     }
-    constexpr reference at(size_type index) {
+    inline constexpr reference at(size_type index) {
         if (index >= size()) {
             throw std::out_of_range("Index out of range in SharedQueue::at");
         }
@@ -192,10 +194,10 @@ public:
     }
 
 
-    constexpr const_reference operator[](size_type index) const noexcept {
+    inline constexpr const_reference operator[](size_type index) const noexcept {
         return *get((_front + index) % S);
     }
-    constexpr reference operator[](size_type index) noexcept {
+    inline constexpr reference operator[](size_type index) noexcept {
         return *get((_front + index) % S);
     }
 
@@ -217,6 +219,17 @@ public:
             }
         }
         _back = _front = _size = 0;
+    }
+
+
+    template<typename It>
+    constexpr void assign(It first, It last) noexcept(std::is_nothrow_copy_constructible_v<T>) {
+        clear();
+        std::size_t i{ _front };
+        for(; first != last; ++first, ++i) {
+            construct(i, *first);
+        }
+        _back = _size = i;
     }
 
 
@@ -263,45 +276,45 @@ public:
 
     /* Iterators */
 
-    constexpr iterator begin() noexcept {
+    inline constexpr iterator begin() noexcept {
         return iterator(_data.data(), _front);
     }
-    constexpr const_iterator begin() const noexcept {
+    inline constexpr const_iterator begin() const noexcept {
         return const_iterator(_data.data(), _front);
     }
-    constexpr const_iterator cbegin() const noexcept {
+    inline constexpr const_iterator cbegin() const noexcept {
         return begin();
     }
     
 
-    constexpr iterator end() noexcept {
+    inline constexpr iterator end() noexcept {
         return iterator(_data.data(), _front + _size);
     }
-    constexpr const_iterator end() const noexcept {
+    inline constexpr const_iterator end() const noexcept {
         return const_iterator(_data.data(), _front + _size);
     }
-    constexpr const_iterator cend() const noexcept {
+    inline constexpr const_iterator cend() const noexcept {
         return end();
     }
 
-    constexpr reverse_iterator rbegin() noexcept {
+    inline constexpr reverse_iterator rbegin() noexcept {
         return reverse_iterator(_data.data(), (_front + _size) % max_size());
     }
-    constexpr const_reverse_iterator rbegin() const noexcept {
+    inline constexpr const_reverse_iterator rbegin() const noexcept {
         return const_reverse_iterator(_data.data(), (_front + max_size() - 1) % max_size());
     }
-    constexpr const_reverse_iterator crbegin() const noexcept {
+    inline constexpr const_reverse_iterator crbegin() const noexcept {
         return rbegin();
     }
     
 
-    constexpr reverse_iterator rend() noexcept {
+    inline constexpr reverse_iterator rend() noexcept {
         return reverse_iterator(_data.data(), (_front + _size) % max_size());
     }
-    constexpr const_reverse_iterator rend() const noexcept {
+    inline constexpr const_reverse_iterator rend() const noexcept {
         return const_reverse_iterator(_data.data(), (_front + max_size() - 1) % max_size());
     }
-    constexpr const_reverse_iterator crend() const noexcept {
+    inline constexpr const_reverse_iterator crend() const noexcept {
         return rend();
     }
 
@@ -327,7 +340,7 @@ public:
     }
 
 
-    constexpr bool operator!=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() == std::declval<const_reference_this_t>())) {
+    inline constexpr bool operator!=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() == std::declval<const_reference_this_t>())) {
         return !(*this == other);
     }
 
@@ -351,17 +364,17 @@ public:
     }
 
 
-    constexpr bool operator<=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+    inline constexpr bool operator<=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
         return !(other < *this);
     }
 
 
-    constexpr bool operator>(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+    inline constexpr bool operator>(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
         return other < *this;
     }
 
 
-    constexpr bool operator>=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
+    inline constexpr bool operator>=(const_reference_this_t other) const noexcept(noexcept(std::declval<const_reference_this_t>() < std::declval<const_reference_this_t>())) {
         return !(*this < other);
     }
 
@@ -369,19 +382,19 @@ public:
 private:
 
     template<typename...Args>
-    constexpr reference construct(std::size_t const idx, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
+    inline constexpr reference construct(std::size_t const idx, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
         return *new(get(idx)) T (std::forward<Args>(args)...);
     }
 
-    constexpr void destruct(std::size_t const idx) noexcept {
+    inline constexpr void destruct(std::size_t const idx) noexcept {
         std::destroy_at(get(idx));
     }
 
-    constexpr pointer get(std::size_t const idx) noexcept {
+    inline constexpr pointer get(std::size_t const idx) noexcept {
         return std::launder(reinterpret_cast<pointer>(std::addressof(_data[idx])));
     }
 
-    constexpr const_pointer get(std::size_t const idx) const noexcept {
+    inline constexpr const_pointer get(std::size_t const idx) const noexcept {
         return std::launder(reinterpret_cast<const_pointer>(std::addressof(_data[idx])));
     }
 
