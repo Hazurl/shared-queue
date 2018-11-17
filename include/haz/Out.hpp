@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <mutex>
+#include <variant>
 
 #define scout ::haz::Out{}
 
@@ -28,15 +29,19 @@ struct alignas(T) Manual {
         T value;
     };
 
-    Manual() {};
-    ~Manual() {};
+    inline constexpr Manual() {};
+    inline constexpr Manual(Manual<T> const&) {};
+    inline constexpr Manual(Manual<T>&&) {};
+    inline ~Manual() {};
+    inline constexpr Manual<T>& operator=(Manual<T> const&) { return *this; };
+    inline constexpr Manual<T>& operator=(Manual<T>&&) { return *this; };
 
     template<typename...Args>
-    void construct(Args&&... args) {
-        new (&value) T (std::forward<Args>(args)...);
+    inline constexpr T& construct(Args&&... args) {
+        return *new (&value) T (std::forward<Args>(args)...);
     }
 
-    void destruct() {
+    inline constexpr void destruct() {
         value.~T();
     }
 };
