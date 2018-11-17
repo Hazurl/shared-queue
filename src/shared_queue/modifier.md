@@ -2,6 +2,7 @@
 
 |||
 | ---:| --- |
+| [assign](modifier/assign.md) | Replaces the content |
 | [clear](modifier/clear.md) | Clear the content |
 | [emplace_back](modifier/emplace_back.md) | Construct an element in-place at the end |
 | [pop_front](modifier/pop_front.md) | Pop the first element |

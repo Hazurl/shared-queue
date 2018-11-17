@@ -16,6 +16,7 @@
         - [operator []](./shared_queue/access/operator.md)
 
     - [Modifier](./shared_queue/modifier.md)
+        - [assign](./shared_queue/modifier/assign.md)
         - [clear](./shared_queue/modifier/clear.md)
         - [push_back](./shared_queue/modifier/push_back.md)
         - [pop_front](./shared_queue/modifier/pop_front.md)

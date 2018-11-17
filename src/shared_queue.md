@@ -50,6 +50,7 @@ Complexity:
 ### Modifiers
 |||
 | ---:| --- |
+| [assign](modifier/assign.md) | Replaces the content |
 | [clear](shared_queue/modifier/clear.md) | Clear the content |
 | [emplace_back](shared_queue/modifier/emplace_back.md) | Construct an element in-place at the end |
 | [pop_front](shared_queue/modifier/pop_front.md) | Pop the first element |
