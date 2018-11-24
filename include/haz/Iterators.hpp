@@ -28,7 +28,7 @@ public:
 
     /* Constructor */
 
-    constexpr Iterator(container_type data, size_type _index) noexcept : _data(data), _index(_index) {}
+    constexpr Iterator(container_type data, size_type index) noexcept : _data(data), _index(index) {}
     constexpr Iterator() noexcept : _data(nullptr), _index(0) {}
 
 
@@ -61,7 +61,7 @@ public:
     /* InputIterator requirement */
 
     constexpr bool operator==(const_reference_this_t other) const noexcept {
-        return _index == other._index && _data == other._data;
+        return (_index == other._index || _data == nullptr) && _data == other._data;
     }
 
 
