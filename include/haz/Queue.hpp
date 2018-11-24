@@ -82,7 +82,7 @@ union ConstexprQueueElement {
     // trivial destructor
     constexpr inline void destruct() noexcept {}
 
-    constexpr ConstexprQueueElement() noexcept(T()) : _element() {}
+    constexpr ConstexprQueueElement() noexcept(noexcept(T())) : _element() {}
     template<typename...Args>
     constexpr ConstexprQueueElement(QueueElementConstructElement, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) : _element(std::forward<Args>(args)...) {}
 
@@ -111,9 +111,10 @@ public:
     using const_reverse_iterator = Iterator<const_value_type,   contained_type const*,  S, false>;
 
     template<typename D>
-    constexpr inline CommonQueueBase(D&& d, size_type front, size_type back, size_type size) : _data(std::forward<D>(d)), _front{front}, _back{back}, _size{size} {}
+    inline CommonQueueBase(D&& d, size_type front, size_type back, size_type size) : _data(std::forward<D>(d)), _front{front}, _back{back}, _size{size} {}
+    inline CommonQueueBase(size_type front, size_type back, size_type size) : _data{}, _front{front}, _back{back}, _size{size} {}
 
-    constexpr inline CommonQueueBase() = default;
+    inline CommonQueueBase() = default;
 
     ~CommonQueueBase() {
         _destructor();
@@ -137,11 +138,11 @@ protected:
 
 
     template<typename...Args>
-    inline constexpr reference construct(std::size_t const idx, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
+    inline reference construct(std::size_t const idx, Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) {
         return _data[idx].construct(std::forward<Args>(args)...);
     }
 
-    inline constexpr void destruct(std::size_t const idx) noexcept {
+    inline void destruct(std::size_t const idx) noexcept {
         return _data[idx].destruct();
     }
 
