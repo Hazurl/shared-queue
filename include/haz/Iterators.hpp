@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iterator>
 #include <new>
 
 namespace haz {
@@ -15,7 +16,7 @@ public:
     using pointer = T*;
     using const_pointer = T const*;
     using reference = T&;
-    using const_reference = reference const;
+    using const_reference = T const&;
     using iterator_category = std::random_access_iterator_tag;
     using size_type = std::size_t;
     using this_t = Iterator<T, C, S, forward>;
@@ -150,12 +151,8 @@ public:
 
 private:
 
-    constexpr reference get(std::size_t const idx) noexcept {
-        return *std::launder(reinterpret_cast<T*>(&_data[idx]));
-    }
-
-    constexpr const_reference get(std::size_t const idx) const noexcept {
-        return *std::launder(reinterpret_cast<T* const>(&_data[idx]));
+    constexpr reference get(std::size_t const idx) const noexcept {
+        return const_cast<reference>(_data[idx]._element);
     }
 
     container_type _data;
