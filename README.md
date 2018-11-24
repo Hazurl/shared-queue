@@ -1,4 +1,6 @@
 # Multithreaded Queue
+[![Build Status](https://api.travis-ci.org/Hazurl/shared-queue.png?branch=master)](https://travis-ci.org/Hazurl/shared-queue)
+[![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://hazurl.github.io/shared-queue/book/index.html)
 
 Consumer/Producer pattern implementation.
 Any number of thread can be either a producer or a consumer, respectively pushing and poping to and from the queue in a transparent way.
