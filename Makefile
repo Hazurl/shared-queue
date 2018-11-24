@@ -400,13 +400,6 @@ $(BUILD_EXE_FOLDER)/$(SRC_FOLDER)/%.o: $(SRC_FOLDER)/%$(EXT_SRC_FILE) $(INC_FOLD
 
 $(TARGET_TEST): $(_BUILD_DIR) $(LIB_TO_BUILD) $(_OBJ_SRC_TEST)
 	@$(call _sub-header,Linking...)
-	@echo
-	@$(CXX) -v
-	@echo
-	@g++ -v
-	@echo
-	@g++-8 -v
-	@echo
 	@$(CXX) $(INC_FLAG) $(TEST_FLAGS) $(FLAGS) $(_OBJ_SRC_TEST) -o "$@" $(LIBS_PATH) $(LIBS)
 	@$(call _header,Executable done ($(TARGET_TEST)))
 
