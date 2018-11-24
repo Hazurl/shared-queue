@@ -94,15 +94,16 @@ class CommonQueueBase {
 public:
 
     using value_type             = T;
-    using const_value_type       = T const;
+    using const_value_type       = value_type const;
     using reference              = value_type&;
-    using const_reference        = reference const;
+    using const_reference        = value_type const&;
     using pointer                = value_type*;
     using const_pointer          = value_type const*;
 
     using contained_type         = CommonQueueElement<T>;
     using container_type         = std::array<contained_type, S>;
     using size_type              = std::size_t;
+    using difference_type        = std::ptrdiff_t;
 
     using iterator               = Iterator<value_type,         contained_type*,        S, true>;
     using const_iterator         = Iterator<const_value_type,   contained_type const*,  S, true>;
@@ -173,15 +174,16 @@ class ConstexprQueueBase {
 public:
 
     using value_type             = T;
-    using const_value_type       = T const;
+    using const_value_type       = value_type const;
     using reference              = value_type&;
-    using const_reference        = reference const;
+    using const_reference        = value_type const&;
     using pointer                = value_type*;
     using const_pointer          = value_type const*;
 
     using contained_type         = ConstexprQueueElement<T>;
     using container_type         = std::array<ConstexprQueueElement<T>, S>;
     using size_type              = std::size_t;
+    using difference_type        = std::ptrdiff_t;
 
     using iterator               = Iterator<value_type,         contained_type*,        S, true>;
     using const_iterator         = Iterator<const_value_type,   contained_type const*,  S, true>;
@@ -253,6 +255,7 @@ public:
 
     using typename base_t::container_type;
     using typename base_t::size_type;
+    using typename base_t::difference_type;
 
     using typename base_t::iterator;
     using typename base_t::const_iterator;
