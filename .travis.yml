@@ -1,2 +1,7 @@
 language: cpp
 script: make -j re-run
+
+addons:
+  apt:
+    packages:
+      - g++-8
