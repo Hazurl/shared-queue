@@ -2,7 +2,8 @@ language: cpp
 script: 
   - sudo ln -s /usr/bin/g++-8 /usr/local/bin/g++
   - g++ -v
-  - make -j test
+  - export CXX=g++ -8
+  - make -j run-test CXX=g++-8
 
 addons:
   apt:
