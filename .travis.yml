@@ -1,7 +1,12 @@
 language: cpp
-script: make -j re-run
+script: 
+  - sudo ln -s /usr/bin/g++-8 /usr/local/bin/g++
+  - g++ -v
+  - make -j re-run
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
-      - g++-8
+      - g++-7
