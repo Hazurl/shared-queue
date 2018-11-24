@@ -33,12 +33,13 @@ BUILD_FOLDER := build
 BUILD_SHARED_FOLDER := $(BUILD_FOLDER)/shared
 BUILD_STATIC_FOLDER := $(BUILD_FOLDER)/static
 BUILD_EXE_FOLDER := $(BUILD_FOLDER)/executable
+BUILD_TEST_FOLDER := $(BUILD_FOLDER)/test
 
 #####
 ##### GENERAL SETTINGS
 #####
 
-PROJECT_NAME := meta_dep
+PROJECT_NAME := shared_queue
 CXX := g++
 SXX := ar
 
@@ -46,6 +47,7 @@ SXX := ar
 TARGET_SHARED := $(BUILD_SHARED_FOLDER)/lib$(PROJECT_NAME).so
 TARGET_STATIC := $(BUILD_STATIC_FOLDER)/lib$(PROJECT_NAME).a
 TARGET_EXE := $(BUILD_EXE_FOLDER)/$(PROJECT_NAME)
+TARGET_TEST := $(BUILD_TEST_FOLDER)/$(PROJECT_NAME)
 
 # Target to build when `make` or `make all` is typed
 TARGET_ALL := $(TARGET_EXE)
@@ -68,20 +70,27 @@ EXT_INC_FILE = .hpp
 # EX: $(1:%$(EXT_SRC_FILE)=%$(EXT_INC_FILE)) 
 # will take the file "folder/sub_folder_file.cpp"
 # and transform it into "folder/sub_folder_file.hpp"
-header-of = $(1:%$(EXT_SRC_FILE)=parser_combinator/%$(EXT_INC_FILE))
+header-of = $(1:%$(EXT_SRC_FILE)=haz/%$(EXT_INC_FILE))
 
 # Relative to $(SRC_FOLDER)
 SRC_EXCLUDE_FILE := 
 # All files that are not use for libraries, don't add src/
 SRC_MAINS := main.cpp main2.cpp main3.cpp test.cpp
 # The main file to use (must be in $(SRC_MAINS))
-SRC_MAIN := test.cpp
+SRC_MAIN := main3.cpp
+# Test file
+SRC_MAIN_TEST := test.cpp
 
 #####
 ##### FLAGS
 #####
 
-FLAGS := -std=c++17 -g3 -Wall -Wextra -Wno-pmf-conversions -O2 -pthread
+OPTI := -O3
+FLAGS := -std=c++17  $(OPTI) -pthread
+FLAGS += -Wall -Wextra -Wno-pmf-conversions -Wshadow -Wpedantic -Wduplicated-cond -Wduplicated-branches -Wlogical-op 
+FLAGS += -Wnull-dereference -Wuseless-cast -Wold-style-cast -Wcast-align -Wcast-qual -Wno-missing-field-initializers 
+TEST_FLAGS := -fsanitize=address -fsanitize=pointer-subtract -fsanitize=pointer-compare -fsanitize=leak -fsanitize=undefined
+TEST_FLAGS += -fsanitize-address-use-after-scope
 STATIC_LINK_FLAG := rcs
 
 # Include path
@@ -97,7 +106,7 @@ INC_FLAG := -I $(INC_FOLDER)
 LIBS_PATH :=
 
 # For example: -lsfml-graphics
-LIBS := 
+LIBS := -lasan
 
 # Library that require to be build
 LIB_TO_BUILD := 
@@ -186,17 +195,22 @@ _SRC_DIR := $(sort $(dir $(_SRC_FILES)))
 _SRC_DIR_MAINS := $(sort $(dir $(_SRC_MAINS)))
 
 _EXE_DIR := $(addprefix $(BUILD_EXE_FOLDER)/,$(_SRC_DIR) $(_SRC_DIR_MAINS))
+_TEST_DIR := $(addprefix $(BUILD_TEST_FOLDER)/,$(_SRC_DIR) $(_SRC_DIR_MAINS))
 _SHARED_DIR := $(addprefix $(BUILD_SHARED_FOLDER)/,$(_SRC_DIR) $(_SRC_DIR_MAINS))
 _STATIC_DIR := $(addprefix $(BUILD_STATIC_FOLDER)/,$(_SRC_DIR) $(_SRC_DIR_MAINS))
 
-_BUILD_DIR := $(_EXE_DIR) $(_SHARED_DIR) $(_STATIC_DIR)
+_BUILD_DIR := $(_EXE_DIR) $(_SHARED_DIR) $(_STATIC_DIR) $(_TEST_DIR)
 
 #####
 ##### OBJECT FILES
 ##### 
 
 _OBJ_MAIN := $(SRC_MAIN:%$(EXT_SRC_FILE)=$(BUILD_EXE_FOLDER)/$(SRC_FOLDER)/%.o)
+_OBJ_MAIN_TEST := $(SRC_MAIN_TEST:%$(EXT_SRC_FILE)=$(BUILD_TEST_FOLDER)/$(SRC_FOLDER)/%.o)
+
 _OBJ_SRC_EXE := $(_OBJ_MAIN) $(_SRC_FILES:%$(EXT_SRC_FILE)=$(BUILD_EXE_FOLDER)/%.o) 
+
+_OBJ_SRC_TEST := $(_OBJ_MAIN_TEST) $(_SRC_FILES:%$(EXT_SRC_FILE)=$(BUILD_TEST_FOLDER)/%.o) 
 
 _OBJ_SRC_SHARED := $(_SRC_FILES:%$(EXT_SRC_FILE)=$(BUILD_SHARED_FOLDER)/%.o)
 
@@ -209,16 +223,20 @@ export LD_LIBRARY_PATH += $(_LIB_PATH_LD)
 ##### RULES
 #####
 
-.PHONY: all executable shared static 
-.PHONY: clean clean-executable clean-shared clean-static
-.PHONY: re re-executable re-shared re-static
-.PHONY: re-run run
+.PHONY: all executable shared static test
+.PHONY: where-executable where-shared where-static where-test
+.PHONY: clean clean-executable clean-shared clean-static clean-test
+.PHONY: re re-executable re-shared re-static re-test
+.PHONY: re-run run re-run-test run-test
 
 .DEFAULT_GOAL := all
 
 all:
 ifneq ($(findstring $(TARGET_EXE),$(TARGET_ALL)),)
 	@make executable
+endif
+ifneq ($(findstring $(TARGET_TEST),$(TARGET_ALL)),)
+	@make test
 endif
 ifneq ($(findstring $(TARGET_SHARED),$(TARGET_ALL)),)
 	@make shared
@@ -239,6 +257,10 @@ static:
 	@$(call _header,BUILDING STATIC LIBRARY...)
 	@make $(TARGET_STATIC)
 
+test:
+	@$(call _header,BUILDING TEST...)
+	@make $(TARGET_TEST)
+
 clean:
 	@$(call _header,REMOVING $(BUILD_FOLDER))
 	@$(call _remove-folder,$(BUILD_FOLDER))
@@ -246,6 +268,10 @@ clean:
 clean-executable:
 	@$(call _header,REMOVING $(BUILD_EXE_FOLDER))
 	@$(call _remove-folder,$(BUILD_EXE_FOLDER))
+
+clean-test:
+	@$(call _header,REMOVING $(BUILD_TEST_FOLDER))
+	@$(call _remove-folder,$(BUILD_TEST_FOLDER))
 
 clean-shared:
 	@$(call _header,REMOVING $(BUILD_SHARED_FOLDER))
@@ -257,6 +283,9 @@ clean-static:
 
 where-executable:
 	@echo $(TARGET_EXE)
+
+where-test:
+	@echo $(TARGET_TEST)
 
 where-shared:
 	@echo $(TARGET_SHARED)
@@ -272,6 +301,10 @@ re-executable:
 	@make clean-executable
 	@make executable
 
+re-test:
+	@make clean-test
+	@make test
+
 re-shared:
 	@make clean-shared
 	@make shared
@@ -286,19 +319,39 @@ run:
 	@$(call _special,EXECUTING $(TARGET_EXE)...)
 	@$(TARGET_EXE) $(args); ERR=$$?; $(call _special,PROGRAM HALT WITH CODE $$ERR); exit $$ERR;
 
+run-test:
+	@make test
+	@echo
+	@$(call _special,EXECUTING $(TARGET_TEST)...)
+	@$(TARGET_TEST) $(args); ERR=$$?; $(call _special,TEST HALT WITH CODE $$ERR); exit $$ERR;
+
 re-run:
 	@make re-executable
 	@make run
 
+re-run-test:
+	@make re-test
+	@make run-test
+
 valgrind:
-	@make executable
+	@make executable OPTI='-Og -g'
 	@echo
 	@$(call _special,EXECUTING $(TARGET_EXE) WITH VALGRIND...)
 	@valgrind $(TARGET_EXE) $(args); ERR=$$?; $(call _special,PROGRAM HALT WITH CODE $$ERR); exit $$ERR;
 
+valgrind-test:
+	@make test OPTI='-Og -g'
+	@echo
+	@$(call _special,EXECUTING $(TARGET_TEST) WITH VALGRIND...)
+	@valgrind $(TARGET_TEST) $(args); ERR=$$?; $(call _special,TEST HALT WITH CODE $$ERR); exit $$ERR;
+
 re-valgrind:
-	@make re-executable
+	@make re-executable OPTI='-Og -g'
 	@make valgrind
+
+re-valgrind-test:
+	@make re-test OPTI='-Og -g'
+	@make valgrind-test
 
 $(_BUILD_DIR):
 	@mkdir -p $(_BUILD_DIR)
@@ -340,6 +393,19 @@ $(TARGET_EXE): $(_BUILD_DIR) $(LIB_TO_BUILD) $(_OBJ_SRC_EXE)
 $(BUILD_EXE_FOLDER)/$(SRC_FOLDER)/%.o: $(SRC_FOLDER)/%$(EXT_SRC_FILE) $(INC_FOLDER)/$(call header-of,%$(EXT_SRC_FILE))
 	@$(call _build-msg,$(notdir $@),$(call _join,$(_comma)$(_space),$(strip $(notdir $< $(wildcard $(word 2,$^))))))
 	@$(CXX) -c $(INC_FLAG) $(FLAGS) -o "$@" "$<"
+
+
+###
+
+
+$(TARGET_TEST): $(_BUILD_DIR) $(LIB_TO_BUILD) $(_OBJ_SRC_TEST)
+	@$(call _sub-header,Linking...)
+	@$(CXX) $(INC_FLAG) $(TEST_FLAGS) $(FLAGS) $(_OBJ_SRC_TEST) -o "$@" $(LIBS_PATH) $(LIBS)
+	@$(call _header,Executable done ($(TARGET_TEST)))
+
+$(BUILD_TEST_FOLDER)/$(SRC_FOLDER)/%.o: $(SRC_FOLDER)/%$(EXT_SRC_FILE) $(INC_FOLDER)/$(call header-of,%$(EXT_SRC_FILE))
+	@$(call _build-msg,$(notdir $@),$(call _join,$(_comma)$(_space),$(strip $(notdir $< $(wildcard $(word 2,$^))))))
+	@$(CXX) -c $(INC_FLAG) $(TEST_FLAGS) $(FLAGS) -o "$@" "$<"
 
 
 # Just to avoid file without headers

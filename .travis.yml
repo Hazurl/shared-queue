@@ -2,7 +2,7 @@ language: cpp
 script: 
   - sudo ln -s /usr/bin/g++-8 /usr/local/bin/g++
   - g++ -v
-  - make -j re-run
+  - make -j test
 
 addons:
   apt:

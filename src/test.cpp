@@ -297,51 +297,41 @@ void test_const_reverse_iterator() {
 
 
 
+template<bool CS, bool RT, typename C, typename M, typename N>
+void _test_constructor_default(M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c;
+        constexpr typename C::size_type size = c.size(); 
+        if constexpr (size != 0) {
+            error(std::forward<M>(cs_message));
+        }
+    }
+
+    if constexpr (RT) {
+        C c;
+        typename C::size_type size = c.size(); 
+        if (size != 0) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
 void test_constructor_default() {
-    MoveOnlyQueue MoveOnlyQueue_rt;
-    typename MoveOnlyQueue::size_type MoveOnlyQueue_rt_size = MoveOnlyQueue_rt.size();
+    _test_constructor_default<false, true, MoveOnlyQueue>(
+        "test_constructor_default: MoveOnlyQueue compile-time's size is not 0",
+        "test_constructor_default: MoveOnlyQueue runtime's size is not 0");
 
-    if (MoveOnlyQueue_rt_size != 0) {
-        error("test_constructor_default: MoveOnlyQueue_rt's size is not 0");
-    }
+    _test_constructor_default<true, true, DefaultQueue>(
+        "test_constructor_default: DefaultQueue compile-time's size is not 0",
+        "test_constructor_default: DefaultQueue runtime's size is not 0");
 
+    _test_constructor_default<false, true, CopyFastMoveQueue>(
+        "test_constructor_default: CopyFastMoveQueue compile-time's size is not 0",
+        "test_constructor_default: CopyFastMoveQueue runtime's size is not 0");
 
-    constexpr DefaultQueue DefaultQueue_cs;
-    constexpr typename DefaultQueue::size_type DefaultQueue_cs_size = DefaultQueue_cs.size();
-
-    if constexpr (DefaultQueue_cs_size != 0) {
-        error("test_constructor_default: DefaultQueue_cs's size is not 0");
-    }
-
-    DefaultQueue DefaultQueue_rt;
-    typename DefaultQueue::size_type DefaultQueue_rt_size = DefaultQueue_rt.size();
-
-    if (DefaultQueue_rt_size != 0) {
-        error("test_constructor_default: DefaultQueue_rt's size is not 0");
-    }
-
-
-    CopyFastMoveQueue CopyFastMoveQueue_rt;
-    typename CopyFastMoveQueue::size_type CopyFastMoveQueue_rt_size = CopyFastMoveQueue_rt.size();
-
-    if (CopyFastMoveQueue_rt_size != 0) {
-        error("test_constructor_default: CopyFastMoveQueue_rt's size is not 0");
-    }
-
-
-    constexpr DeepCopyQueue DeepCopyQueue_cs;
-    constexpr typename DeepCopyQueue::size_type DeepCopyQueue_cs_size = DeepCopyQueue_cs.size();
-
-    if constexpr (DeepCopyQueue_cs_size != 0) {
-        error("test_constructor_default: DeepCopyQueue_cs's size is not 0");
-    }
-
-    DeepCopyQueue DeepCopyQueue_rt;
-    typename DeepCopyQueue::size_type DeepCopyQueue_rt_size = DeepCopyQueue_rt.size();
-
-    if (DeepCopyQueue_rt_size != 0) {
-        error("test_constructor_default: DeepCopyQueue_rt's size is not 0");
-    }
+    _test_constructor_default<true, true, DeepCopyQueue>(
+        "test_constructor_default: DeepCopyQueue compile-time's size is not 0",
+        "test_constructor_default: DeepCopyQueue runtime's size is not 0");
 }
 
 
