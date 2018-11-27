@@ -21,17 +21,20 @@ using Queue = haz::Queue<T, S>;
 
 
 
-using MoveOnlyQueueElement = std::unique_ptr<int>;
-using MoveOnlyQueue = Queue<MoveOnlyQueueElement, 5>;
+using UniquePtrQEl = std::unique_ptr<int>;
+using UniquePtrQ = Queue<UniquePtrQEl, 5>;
 
-using DefaultQueueElement = int;
-using DefaultQueue = Queue<DefaultQueueElement, 5>;
+using IntQEl = int;
+using IntQ = Queue<IntQEl, 5>;
 
-using CopyFastMoveQueueElement = std::vector<int>;
-using CopyFastMoveQueue = Queue<CopyFastMoveQueueElement, 5>;
+using VectorQEl = std::vector<int>;
+using VectorQ = Queue<VectorQEl, 5>;
 
-using DeepCopyQueueElement = std::array<int, 3>;
-using DeepCopyQueue = Queue<DeepCopyQueueElement, 5>;
+using Array3QEl = std::array<int, 3>;
+using Array3Q = Queue<Array3QEl, 5>;
+
+using MutexQEl = std::mutex;
+using MutexQ = Queue<MutexQEl, 5>;
 
 
 
@@ -48,20 +51,24 @@ template<typename T>
 using value_type_t = typename T::value_type;
 
 void test_value_type() {
-    if (! std::is_detected_exact_v<MoveOnlyQueueElement, value_type_t, MoveOnlyQueue>) {
-        error("test_value_type: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<UniquePtrQEl, value_type_t, UniquePtrQ>) {
+        error("test_value_type: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<DefaultQueueElement, value_type_t, DefaultQueue>) {
-        error("test_value_type: error on DefaultQueue");
+    if (! std::is_detected_exact_v<IntQEl, value_type_t, IntQ>) {
+        error("test_value_type: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<CopyFastMoveQueueElement, value_type_t, CopyFastMoveQueue>) {
-        error("test_value_type: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<VectorQEl, value_type_t, VectorQ>) {
+        error("test_value_type: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<DeepCopyQueueElement, value_type_t, DeepCopyQueue>) {
-        error("test_value_type: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<Array3QEl, value_type_t, Array3Q>) {
+        error("test_value_type: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<MutexQEl, value_type_t, MutexQ>) {
+        error("test_value_type: error on MutexQ");
     }
 } 
 
@@ -71,20 +78,24 @@ template<typename T>
 using size_type_t = typename T::size_type;
 
 void test_size_type() {
-    if (! std::is_detected_exact_v<std::size_t, size_type_t, MoveOnlyQueue>) {
-        error("test_size_type: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<std::size_t, size_type_t, UniquePtrQ>) {
+        error("test_size_type: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<std::size_t, size_type_t, DefaultQueue>) {
-        error("test_size_type: error on DefaultQueue");
+    if (! std::is_detected_exact_v<std::size_t, size_type_t, IntQ>) {
+        error("test_size_type: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<std::size_t, size_type_t, CopyFastMoveQueue>) {
-        error("test_size_type: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<std::size_t, size_type_t, VectorQ>) {
+        error("test_size_type: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<std::size_t, size_type_t, DeepCopyQueue>) {
-        error("test_size_type: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<std::size_t, size_type_t, Array3Q>) {
+        error("test_size_type: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<std::size_t, size_type_t, MutexQ>) {
+        error("test_size_type: error on MutexQ");
     }
 } 
 
@@ -94,20 +105,24 @@ template<typename T>
 using difference_type_t = typename T::difference_type;
 
 void test_difference_type() {
-    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, MoveOnlyQueue>) {
-        error("test_difference_type: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, UniquePtrQ>) {
+        error("test_difference_type: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, DefaultQueue>) {
-        error("test_difference_type: error on DefaultQueue");
+    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, IntQ>) {
+        error("test_difference_type: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, CopyFastMoveQueue>) {
-        error("test_difference_type: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, VectorQ>) {
+        error("test_difference_type: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, DeepCopyQueue>) {
-        error("test_difference_type: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, Array3Q>) {
+        error("test_difference_type: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<std::ptrdiff_t, difference_type_t, MutexQ>) {
+        error("test_difference_type: error on MutexQ");
     }
 } 
 
@@ -117,20 +132,24 @@ template<typename T>
 using reference_t = typename T::reference;
 
 void test_reference() {
-    if (! std::is_detected_exact_v<MoveOnlyQueueElement&, reference_t, MoveOnlyQueue>) {
-        error("test_reference: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<UniquePtrQEl&, reference_t, UniquePtrQ>) {
+        error("test_reference: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<DefaultQueueElement&, reference_t, DefaultQueue>) {
-        error("test_reference: error on DefaultQueue");
+    if (! std::is_detected_exact_v<IntQEl&, reference_t, IntQ>) {
+        error("test_reference: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<CopyFastMoveQueueElement&, reference_t, CopyFastMoveQueue>) {
-        error("test_reference: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<VectorQEl&, reference_t, VectorQ>) {
+        error("test_reference: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<DeepCopyQueueElement&, reference_t, DeepCopyQueue>) {
-        error("test_reference: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<Array3QEl&, reference_t, Array3Q>) {
+        error("test_reference: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<MutexQEl&, reference_t, MutexQ>) {
+        error("test_reference: error on MutexQ");
     }
 } 
 
@@ -140,20 +159,24 @@ template<typename T>
 using const_reference_t = typename T::const_reference;
 
 void test_const_reference() {
-    if (! std::is_detected_exact_v<MoveOnlyQueueElement const&, const_reference_t, MoveOnlyQueue>) {
-        error("test_const_reference: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<UniquePtrQEl const&, const_reference_t, UniquePtrQ>) {
+        error("test_const_reference: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<DefaultQueueElement const&, const_reference_t, DefaultQueue>) {
-        error("test_const_reference: error on DefaultQueue");
+    if (! std::is_detected_exact_v<IntQEl const&, const_reference_t, IntQ>) {
+        error("test_const_reference: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<CopyFastMoveQueueElement const&, const_reference_t, CopyFastMoveQueue>) {
-        error("test_const_reference: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<VectorQEl const&, const_reference_t, VectorQ>) {
+        error("test_const_reference: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<DeepCopyQueueElement const&, const_reference_t, DeepCopyQueue>) {
-        error("test_const_reference: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<Array3QEl const&, const_reference_t, Array3Q>) {
+        error("test_const_reference: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<MutexQEl const&, const_reference_t, MutexQ>) {
+        error("test_const_reference: error on MutexQ");
     }
 } 
 
@@ -163,20 +186,24 @@ template<typename T>
 using pointer_t = typename T::pointer;
 
 void test_pointer() {
-    if (! std::is_detected_exact_v<MoveOnlyQueueElement*, pointer_t, MoveOnlyQueue>) {
-        error("test_pointer: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<UniquePtrQEl*, pointer_t, UniquePtrQ>) {
+        error("test_pointer: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<DefaultQueueElement*, pointer_t, DefaultQueue>) {
-        error("test_pointer: error on DefaultQueue");
+    if (! std::is_detected_exact_v<IntQEl*, pointer_t, IntQ>) {
+        error("test_pointer: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<CopyFastMoveQueueElement*, pointer_t, CopyFastMoveQueue>) {
-        error("test_pointer: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<VectorQEl*, pointer_t, VectorQ>) {
+        error("test_pointer: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<DeepCopyQueueElement*, pointer_t, DeepCopyQueue>) {
-        error("test_pointer: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<Array3QEl*, pointer_t, Array3Q>) {
+        error("test_pointer: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<MutexQEl*, pointer_t, MutexQ>) {
+        error("test_pointer: error on MutexQ");
     }
 } 
 
@@ -186,20 +213,24 @@ template<typename T>
 using const_pointer_t = typename T::const_pointer;
 
 void test_const_pointer() {
-    if (! std::is_detected_exact_v<MoveOnlyQueueElement const*, const_pointer_t, MoveOnlyQueue>) {
-        error("test_const_pointer: error on MoveOnlyQueue");
+    if (! std::is_detected_exact_v<UniquePtrQEl const*, const_pointer_t, UniquePtrQ>) {
+        error("test_const_pointer: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_exact_v<DefaultQueueElement const*, const_pointer_t, DefaultQueue>) {
-        error("test_const_pointer: error on DefaultQueue");
+    if (! std::is_detected_exact_v<IntQEl const*, const_pointer_t, IntQ>) {
+        error("test_const_pointer: error on IntQ");
     }
 
-    if (! std::is_detected_exact_v<CopyFastMoveQueueElement const*, const_pointer_t, CopyFastMoveQueue>) {
-        error("test_const_pointer: error on CopyFastMoveQueue");
+    if (! std::is_detected_exact_v<VectorQEl const*, const_pointer_t, VectorQ>) {
+        error("test_const_pointer: error on VectorQ");
     }
 
-    if (! std::is_detected_exact_v<DeepCopyQueueElement const*, const_pointer_t, DeepCopyQueue>) {
-        error("test_const_pointer: error on DeepCopyQueue");
+    if (! std::is_detected_exact_v<Array3QEl const*, const_pointer_t, Array3Q>) {
+        error("test_const_pointer: error on Array3Q");
+    }
+
+    if (! std::is_detected_exact_v<MutexQEl const*, const_pointer_t, MutexQ>) {
+        error("test_const_pointer: error on MutexQ");
     }
 } 
 
@@ -209,20 +240,24 @@ template<typename T>
 using iterator_t = typename T::iterator;
 
 void test_iterator() {
-    if (! std::is_detected_v<iterator_t, MoveOnlyQueue>) {
-        error("test_iterator: error on MoveOnlyQueue");
+    if (! std::is_detected_v<iterator_t, UniquePtrQ>) {
+        error("test_iterator: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_v<iterator_t, DefaultQueue>) {
-        error("test_iterator: error on DefaultQueue");
+    if (! std::is_detected_v<iterator_t, IntQ>) {
+        error("test_iterator: error on IntQ");
     }
 
-    if (! std::is_detected_v<iterator_t, CopyFastMoveQueue>) {
-        error("test_iterator: error on CopyFastMoveQueue");
+    if (! std::is_detected_v<iterator_t, VectorQ>) {
+        error("test_iterator: error on VectorQ");
     }
 
-    if (! std::is_detected_v<iterator_t, DeepCopyQueue>) {
-        error("test_iterator: error on DeepCopyQueue");
+    if (! std::is_detected_v<iterator_t, Array3Q>) {
+        error("test_iterator: error on Array3Q");
+    }
+
+    if (! std::is_detected_v<iterator_t, MutexQ>) {
+        error("test_iterator: error on MutexQ");
     }
 } 
 
@@ -232,20 +267,24 @@ template<typename T>
 using const_iterator_t = typename T::const_iterator;
 
 void test_const_iterator() {
-    if (! std::is_detected_v<const_iterator_t, MoveOnlyQueue>) {
-        error("test_const_iterator: error on MoveOnlyQueue");
+    if (! std::is_detected_v<const_iterator_t, UniquePtrQ>) {
+        error("test_const_iterator: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_v<const_iterator_t, DefaultQueue>) {
-        error("test_const_iterator: error on DefaultQueue");
+    if (! std::is_detected_v<const_iterator_t, IntQ>) {
+        error("test_const_iterator: error on IntQ");
     }
 
-    if (! std::is_detected_v<const_iterator_t, CopyFastMoveQueue>) {
-        error("test_const_iterator: error on CopyFastMoveQueue");
+    if (! std::is_detected_v<const_iterator_t, VectorQ>) {
+        error("test_const_iterator: error on VectorQ");
     }
 
-    if (! std::is_detected_v<const_iterator_t, DeepCopyQueue>) {
-        error("test_const_iterator: error on DeepCopyQueue");
+    if (! std::is_detected_v<const_iterator_t, Array3Q>) {
+        error("test_const_iterator: error on Array3Q");
+    }
+
+    if (! std::is_detected_v<const_iterator_t, MutexQ>) {
+        error("test_const_iterator: error on MutexQ");
     }
 } 
 
@@ -255,20 +294,24 @@ template<typename T>
 using reverse_iterator_t = typename T::reverse_iterator;
 
 void test_reverse_iterator() {
-    if (! std::is_detected_v<reverse_iterator_t, MoveOnlyQueue>) {
-        error("test_reverse_iterator: error on MoveOnlyQueue");
+    if (! std::is_detected_v<reverse_iterator_t, UniquePtrQ>) {
+        error("test_reverse_iterator: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_v<reverse_iterator_t, DefaultQueue>) {
-        error("test_reverse_iterator: error on DefaultQueue");
+    if (! std::is_detected_v<reverse_iterator_t, IntQ>) {
+        error("test_reverse_iterator: error on IntQ");
     }
 
-    if (! std::is_detected_v<reverse_iterator_t, CopyFastMoveQueue>) {
-        error("test_reverse_iterator: error on CopyFastMoveQueue");
+    if (! std::is_detected_v<reverse_iterator_t, VectorQ>) {
+        error("test_reverse_iterator: error on VectorQ");
     }
 
-    if (! std::is_detected_v<reverse_iterator_t, DeepCopyQueue>) {
-        error("test_reverse_iterator: error on DeepCopyQueue");
+    if (! std::is_detected_v<reverse_iterator_t, Array3Q>) {
+        error("test_reverse_iterator: error on Array3Q");
+    }
+
+    if (! std::is_detected_v<reverse_iterator_t, MutexQ>) {
+        error("test_reverse_iterator: error on MutexQ");
     }
 } 
 
@@ -278,20 +321,24 @@ template<typename T>
 using const_reverse_iterator_t = typename T::const_reverse_iterator;
 
 void test_const_reverse_iterator() {
-    if (! std::is_detected_v<const_reverse_iterator_t, MoveOnlyQueue>) {
-        error("test_const_reverse_iterator: error on MoveOnlyQueue");
+    if (! std::is_detected_v<const_reverse_iterator_t, UniquePtrQ>) {
+        error("test_const_reverse_iterator: error on UniquePtrQ");
     }
 
-    if (! std::is_detected_v<const_reverse_iterator_t, DefaultQueue>) {
-        error("test_const_reverse_iterator: error on DefaultQueue");
+    if (! std::is_detected_v<const_reverse_iterator_t, IntQ>) {
+        error("test_const_reverse_iterator: error on IntQ");
     }
 
-    if (! std::is_detected_v<const_reverse_iterator_t, CopyFastMoveQueue>) {
-        error("test_const_reverse_iterator: error on CopyFastMoveQueue");
+    if (! std::is_detected_v<const_reverse_iterator_t, VectorQ>) {
+        error("test_const_reverse_iterator: error on VectorQ");
     }
 
-    if (! std::is_detected_v<const_reverse_iterator_t, DeepCopyQueue>) {
-        error("test_const_reverse_iterator: error on DeepCopyQueue");
+    if (! std::is_detected_v<const_reverse_iterator_t, Array3Q>) {
+        error("test_const_reverse_iterator: error on Array3Q");
+    }
+
+    if (! std::is_detected_v<const_reverse_iterator_t, MutexQ>) {
+        error("test_const_reverse_iterator: error on MutexQ");
     }
 }
 
@@ -317,116 +364,405 @@ void _test_constructor_default(M&& cs_message, N&& rt_message) {
 }
 
 void test_constructor_default() {
-    _test_constructor_default<false, true, MoveOnlyQueue>(
-        "test_constructor_default: MoveOnlyQueue compile-time's size is not 0",
-        "test_constructor_default: MoveOnlyQueue runtime's size is not 0");
+    _test_constructor_default<false, true, UniquePtrQ>(
+        "test_constructor_default: UniquePtrQ compile-time's size is not 0",
+        "test_constructor_default: UniquePtrQ runtime's size is not 0");
+    _test_constructor_default<true, true, IntQ>(
+        "test_constructor_default: IntQ compile-time's size is not 0",
+        "test_constructor_default: IntQ runtime's size is not 0");
+    _test_constructor_default<false, true, VectorQ>(
+        "test_constructor_default: VectorQ compile-time's size is not 0",
+        "test_constructor_default: VectorQ runtime's size is not 0");
+    _test_constructor_default<true, true, Array3Q>(
+        "test_constructor_default: Array3Q compile-time's size is not 0",
+        "test_constructor_default: Array3Q runtime's size is not 0");
+    _test_constructor_default<true, true, MutexQ>(
+        "test_constructor_default: MutexQ compile-time's size is not 0",
+        "test_constructor_default: MutexQ runtime's size is not 0");
+}
 
-    _test_constructor_default<true, true, DefaultQueue>(
-        "test_constructor_default: DefaultQueue compile-time's size is not 0",
-        "test_constructor_default: DefaultQueue runtime's size is not 0");
 
-    _test_constructor_default<false, true, CopyFastMoveQueue>(
-        "test_constructor_default: CopyFastMoveQueue compile-time's size is not 0",
-        "test_constructor_default: CopyFastMoveQueue runtime's size is not 0");
 
-    _test_constructor_default<true, true, DeepCopyQueue>(
-        "test_constructor_default: DeepCopyQueue compile-time's size is not 0",
-        "test_constructor_default: DeepCopyQueue runtime's size is not 0");
+template<bool CS, bool RT, typename C, typename M, typename N>
+void _test_constructor_init_default_n(M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c(typename C::size_type{5});
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (size != 5) {
+            error(std::forward<M>(cs_message));
+        }
+    }
+
+    if constexpr (RT) {
+        C c(typename C::size_type{5});
+        typename C::size_type size = c.size();
+
+        if (size != 5) {
+            error(std::forward<N>(rt_message));
+        }
+    }
 }
 
 
 
 void test_constructor_init_default_n() {
-    MoveOnlyQueue MoveOnlyQueue_rt(typename MoveOnlyQueue::size_type{5});
-    typename MoveOnlyQueue::size_type MoveOnlyQueue_rt_size = MoveOnlyQueue_rt.size();
+    _test_constructor_init_default_n<false, true, UniquePtrQ>(
+        "test_constructor_init_default_n: UniquePtrQ compile-time's size is not 5",
+        "test_constructor_init_default_n: UniquePtrQ runtime's size is not 5");
+    _test_constructor_init_default_n<true, true, IntQ>(
+        "test_constructor_init_default_n: IntQ compile-time's size is not 5",
+        "test_constructor_init_default_n: IntQ runtime's size is not 5");
+    _test_constructor_init_default_n<false, true, VectorQ>(
+        "test_constructor_init_default_n: VectorQ compile-time's size is not 5",
+        "test_constructor_init_default_n: VectorQ runtime's size is not 5");
+    _test_constructor_init_default_n<true, true, Array3Q>(
+        "test_constructor_init_default_n: Array3Q compile-time's size is not 5",
+        "test_constructor_init_default_n: Array3Q runtime's size is not 5");
+    _test_constructor_init_default_n<true, true, MutexQ>(
+        "test_constructor_init_default_n: MutexQ compile-time's size is not 5",
+        "test_constructor_init_default_n: MutexQ runtime's size is not 5");
+}
 
-    if (MoveOnlyQueue_rt_size != 5) {
-        error("test_constructor_init_default_n: MoveOnlyQueue_rt's size is not 5");
+
+
+template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
+void _test_constructor_init_copy_n(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr E e = make();
+        constexpr C c(typename C::size_type{5}, e);
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (size != 5 || e != c[0] || e != c[4]) {
+            error(std::forward<M>(cs_message));
+        }
     }
 
+    if constexpr (RT) {
+        E e = make();
+        C c(typename C::size_type{5}, e);
+        typename C::size_type size = c.size();
 
-    constexpr DefaultQueue DefaultQueue_cs(typename DefaultQueue::size_type{5});
-    constexpr typename DefaultQueue::size_type DefaultQueue_cs_size = DefaultQueue_cs.size();
-
-    if constexpr (DefaultQueue_cs_size != 5) {
-        error("test_constructor_init_default_n: DefaultQueue_cs's size is not 5");
-    }
-
-    DefaultQueue DefaultQueue_rt(typename DefaultQueue::size_type{5});
-    typename DefaultQueue::size_type DefaultQueue_rt_size = DefaultQueue_rt.size();
-
-    if (DefaultQueue_rt_size != 5) {
-        error("test_constructor_init_default_n: DefaultQueue_rt's size is not 5");
-    }
-
-
-    CopyFastMoveQueue CopyFastMoveQueue_rt(typename CopyFastMoveQueue::size_type{5});
-    typename CopyFastMoveQueue::size_type CopyFastMoveQueue_rt_size = CopyFastMoveQueue_rt.size();
-
-    if (CopyFastMoveQueue_rt_size != 5) {
-        error("test_constructor_init_default_n: CopyFastMoveQueue_rt's size is not 5");
-    }
-
-
-    constexpr DeepCopyQueue DeepCopyQueue_cs(typename DeepCopyQueue::size_type{5});
-    constexpr typename DeepCopyQueue::size_type DeepCopyQueue_cs_size = DeepCopyQueue_cs.size();
-
-    if constexpr (DeepCopyQueue_cs_size != 5) {
-        error("test_constructor_init_default_n: DeepCopyQueue_cs's size is not 5");
-    }
-
-    DeepCopyQueue DeepCopyQueue_rt(typename DeepCopyQueue::size_type{5});
-    typename DeepCopyQueue::size_type DeepCopyQueue_rt_size = DeepCopyQueue_rt.size();
-
-    if (DeepCopyQueue_rt_size != 5) {
-        error("test_constructor_init_default_n: DeepCopyQueue_rt's size is not 5");
+        if (size != 5 || e != c[0] || e != c[4]) {
+            error(std::forward<N>(rt_message));
+        }
     }
 }
 
 
 
+constexpr bool operator !=(Array3QEl const& lhs, Array3QEl const& rhs) {
+    for(std::size_t i{0}; i < lhs.size(); ++i) {
+        if (lhs[i] != rhs[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
 void test_constructor_init_copy_n() {
-    constexpr DefaultQueueElement DefaultQueue_cs_element{ 0 };
-    constexpr DefaultQueue DefaultQueue_cs(typename DefaultQueue::size_type{5}, DefaultQueue_cs_element);
-    constexpr typename DefaultQueue::size_type DefaultQueue_cs_size = DefaultQueue_cs.size();
+    _test_constructor_init_copy_n<true, true, IntQ, IntQEl>([] () -> IntQEl { return 0xBADC0DE; },
+        "test_constructor_init_copy_n: IntQ compile-time's size is not 5, or the copy did something wrong",
+        "test_constructor_init_copy_n: IntQ runtime's size is not 5, or the copy did something wrong");
+    _test_constructor_init_copy_n<false, true, VectorQ, VectorQEl>([] () -> VectorQEl { return { 0, 1, 2 }; },
+        "test_constructor_init_copy_n: VectorQ compile-time's size is not 5, or the copy did something wrong",
+        "test_constructor_init_copy_n: VectorQ runtime's size is not 5, or the copy did something wrong");
+    _test_constructor_init_copy_n<true, true, Array3Q, Array3QEl>([] () -> Array3QEl { return { 0, 1, 2 }; },
+        "test_constructor_init_copy_n: Array3Q compile-time's size is not 5, or the copy did something wrong",
+        "test_constructor_init_copy_n: Array3Q runtime's size is not 5, or the copy did something wrong");
+}
 
-    if constexpr (DefaultQueue_cs_size != 5 && DefaultQueue_cs_element == DefaultQueue_cs[0] && DefaultQueue_cs_element == DefaultQueue_cs[4]) {
-        error("test_constructor_init_default_n: DefaultQueue_cs's size is not 5, or the copy did something wrong");
+
+
+template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
+void _test_constructor_range(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        constexpr C c(std::begin(es), std::end(es));
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+            error(std::forward<M>(cs_message));
+        }
     }
 
-    DefaultQueueElement DefaultQueue_rt_element{ 0 };
-    DefaultQueue DefaultQueue_rt(typename DefaultQueue::size_type{5}, DefaultQueue_rt_element);
-    typename DefaultQueue::size_type DefaultQueue_rt_size = DefaultQueue_rt.size();
+    if constexpr (RT) {
+        std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        C c(std::begin(es), std::end(es));
+        typename C::size_type size = c.size();
 
-    if (DefaultQueue_rt_size != 5 && DefaultQueue_rt_element == DefaultQueue_rt[0] && DefaultQueue_rt_element == DefaultQueue_rt[4]) {
-        error("test_constructor_init_default_n: DefaultQueue_rt's size is not 5, or the copy did something wrong");
+        if (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+void test_constructor_range() {
+    _test_constructor_range<true, true, IntQ, IntQEl>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_constructor_range: IntQ compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_range: IntQ runtime's size is not 4, or the copy of the range did something wrong");
+    _test_constructor_range<false, true, VectorQ, VectorQEl>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_constructor_range: VectorQ compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_range: VectorQ runtime's size is not 4, or the copy of the range did something wrong");
+    _test_constructor_range<true, true, Array3Q, Array3QEl>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_constructor_range: Array3Q compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_range: Array3Q runtime's size is not 4, or the copy of the range did something wrong");
+}
+
+
+
+template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
+void _test_constructor_initializer_list(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        constexpr C c(std::move(es));
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+            error(std::forward<M>(cs_message));
+        }
     }
 
+    if constexpr (RT) {
+        std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        C c(std::move(es));
+        typename C::size_type size = c.size();
 
-    CopyFastMoveQueueElement CopyFastMoveQueue_rt_element{ 0, 1, 2 };
-    CopyFastMoveQueue CopyFastMoveQueue_rt(typename CopyFastMoveQueue::size_type{5}, CopyFastMoveQueue_rt_element);
-    typename CopyFastMoveQueue::size_type CopyFastMoveQueue_rt_size = CopyFastMoveQueue_rt.size();
+        if (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
 
-    if (CopyFastMoveQueue_rt_size != 5 && CopyFastMoveQueue_rt_element == CopyFastMoveQueue_rt[0] && CopyFastMoveQueue_rt_element == CopyFastMoveQueue_rt[4]) {
-        error("test_constructor_init_default_n: CopyFastMoveQueue_rt's size is not 5, or the copy did something wrong");
+
+
+void test_constructor_initializer_list() {
+    _test_constructor_initializer_list<true, true, IntQ, IntQEl>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_constructor_initializer_list: IntQ compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_initializer_list: IntQ runtime's size is not 4, or the copy of the range did something wrong");
+    _test_constructor_initializer_list<false, true, VectorQ, VectorQEl>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_constructor_initializer_list: VectorQ compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_initializer_list: VectorQ runtime's size is not 4, or the copy of the range did something wrong");
+    _test_constructor_initializer_list<true, true, Array3Q, Array3QEl>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_constructor_initializer_list: Array3Q compile-time's size is not 4, or the copy of the range did something wrong",
+        "test_constructor_initializer_list: Array3Q runtime's size is not 4, or the copy of the range did something wrong");
+}
+
+
+
+template<typename C, typename E, typename F>
+constexpr C _test_push_back_copy_helper(F&& make) {
+    C c;
+    E e0 = make(0);
+    E e1 = make(1);
+    E e2 = make(2);
+    c.push_back(e0);
+    c.push_back(e1);
+    c.push_back(e2);
+    return c;
+}
+
+
+
+template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
+void _test_push_back_copy(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c = _test_push_back_copy_helper<C, E>(make);
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (size != 3 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2]) {
+            error(std::forward<M>(cs_message));
+        }
     }
 
+    if constexpr (RT) {
+        C c = _test_push_back_copy_helper<C, E>(make);
+        typename C::size_type size = c.size();
 
-    constexpr DeepCopyQueueElement DeepCopyQueue_cs_element{ 0, 1, 2 };
-    constexpr DeepCopyQueue DeepCopyQueue_cs(typename DeepCopyQueue::size_type{5}, DeepCopyQueue_cs_element);
-    constexpr typename DeepCopyQueue::size_type DeepCopyQueue_cs_size = DeepCopyQueue_cs.size();
+        if (size != 3 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2]) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
 
-    if constexpr (DeepCopyQueue_cs_size != 5 && DeepCopyQueue_cs_element == DeepCopyQueue_cs[0] && DeepCopyQueue_cs_element == DeepCopyQueue_cs[4]) {
-        error("test_constructor_init_default_n: DeepCopyQueue_cs's size is not 5, or the copy did something wrong");
+
+
+void test_push_back_copy() {
+    _test_push_back_copy<true, true, IntQ, IntQEl>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_push_back_copy: IntQ compile-time's size is not 3, or the elements are wrongly copied",
+        "test_push_back_copy: IntQ runtime's size is not 3, or the elements are wrongly copied");
+    _test_push_back_copy<false, true, VectorQ, VectorQEl>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_push_back_copy: VectorQ compile-time's size is not 3, or the elements are wrongly copied",
+        "test_push_back_copy: VectorQ runtime's size is not 3, or the elements are wrongly copied");
+    _test_push_back_copy<true, true, Array3Q, Array3QEl>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_push_back_copy: Array3Q compile-time's size is not 3, or the elements are wrongly copied",
+        "test_push_back_copy: Array3Q runtime's size is not 3, or the elements are wrongly copied");
+}
+
+
+
+template<typename C, typename F>
+constexpr C _test_push_back_move_helper(F&& make) {
+    C c;
+    c.push_back(std::move(make(0)));
+    c.push_back(std::move(make(1)));
+    c.push_back(std::move(make(2)));
+    return c;
+}
+
+
+
+template<bool CS, bool RT, typename C, typename E, bool D, typename F, typename M, typename N>
+void _test_push_back_move(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c = _test_push_back_move_helper<C>(make);
+        constexpr typename C::size_type size = c.size();
+
+        if constexpr (D) {
+            if constexpr (size != 3 || *make(0) != *c[0] || *make(1) != *c[1] || *make(2) != *c[2]) {
+                error(std::forward<M>(cs_message));
+            }
+        } else {
+            if constexpr (size != 3 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2]) {
+                error(std::forward<M>(cs_message));
+            }
+        }
     }
 
-    DeepCopyQueueElement DeepCopyQueue_rt_element{ 0, 1, 2 };
-    DeepCopyQueue DeepCopyQueue_rt(typename DeepCopyQueue::size_type{5});
-    typename DeepCopyQueue::size_type DeepCopyQueue_rt_size = DeepCopyQueue_rt.size();
+    if constexpr (RT) {
+        C c = _test_push_back_move_helper<C>(make);
+        typename C::size_type size = c.size();
 
-    if (DeepCopyQueue_rt_size != 5 && DeepCopyQueue_rt_element == DeepCopyQueue_rt[0] && DeepCopyQueue_rt_element == DeepCopyQueue_rt[4]) {
-        error("test_constructor_init_default_n: DeepCopyQueue_rt's size is not 5, or the copy did something wrong");
+        if constexpr (D) {
+            if (size != 3 || *make(0) != *c[0] || *make(1) != *c[1] || *make(2) != *c[2]) {
+                error(std::forward<N>(rt_message));
+            }
+        } else {
+            if (size != 3 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2]) {
+                error(std::forward<N>(rt_message));
+            }
+        }
     }
+}
+
+
+
+void test_push_back_move() {
+    _test_push_back_move<false, true, UniquePtrQ, UniquePtrQEl, true>([] (int idx) -> UniquePtrQEl { return std::make_unique<int>(0xBADC0DE << idx); },
+        "test_push_back_move: UniquePtrQ compile-time's size is not 3, or the elements are wrongly moved",
+        "test_push_back_move: UniquePtrQ runtime's size is not 3, or the elements are wrongly moved");
+    _test_push_back_move<true, true, IntQ, IntQEl, false>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_push_back_move: IntQ compile-time's size is not 3, or the elements are wrongly moved",
+        "test_push_back_move: IntQ runtime's size is not 3, or the elements are wrongly moved");
+    _test_push_back_move<false, true, VectorQ, VectorQEl, false>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_push_back_move: VectorQ compile-time's size is not 3, or the elements are wrongly moved",
+        "test_push_back_move: VectorQ runtime's size is not 3, or the elements are wrongly moved");
+    _test_push_back_move<true, true, Array3Q, Array3QEl, false>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_push_back_move: Array3Q compile-time's size is not 3, or the elements are wrongly moved",
+        "test_push_back_move: Array3Q runtime's size is not 3, or the elements are wrongly moved");
+}
+
+
+
+template<bool CS, bool RT, typename C, typename E, bool D, typename F, typename M, typename N>
+void _test_copy_constructor(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C o{ make(0), make(1), make(2), make(3) };
+        constexpr C c(o);
+
+        if constexpr (D) {
+            if constexpr (c.size() != o.size() || *o[0] != *c[0] || *o[1] != *c[1] || *o[2] != *c[2] || *o[3] != *c[3]) {
+                error(std::forward<M>(cs_message));
+            }
+        } else {
+            if constexpr (c.size() != o.size() || o[0] != c[0] || o[1] != c[1] || o[2] != c[2] || o[3] != c[3]) {
+                error(std::forward<M>(cs_message));
+            }
+        }
+    }
+
+    if constexpr (RT) {
+        C o{ make(0), make(1), make(2), make(3) };
+        C c(o);
+
+        if constexpr (D) {
+            if (c.size() != o.size() || *o[0] != *c[0] || *o[1] != *c[1] || *o[2] != *c[2] || *o[3] != *c[3]) {
+                error(std::forward<N>(rt_message));
+            }
+        } else {
+            if (c.size() != o.size() || o[0] != c[0] || o[1] != c[1] || o[2] != c[2] || o[3] != c[3]) {
+                error(std::forward<N>(rt_message));
+            }
+        }
+    }
+}
+
+
+
+void test_copy_constructor() {
+    _test_copy_constructor<true, true, IntQ, IntQEl, false>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_copy_constructor: IntQ compile-time's size is not 4, or the elements are wrongly copied",
+        "test_copy_constructor: IntQ runtime's size is not 4, or the elements are wrongly copied");
+    _test_copy_constructor<false, true, VectorQ, VectorQEl, false>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_copy_constructor: VectorQ compile-time's size is not 4, or the elements are wrongly copied",
+        "test_copy_constructor: VectorQ runtime's size is not 4, or the elements are wrongly copied");
+    _test_copy_constructor<true, true, Array3Q, Array3QEl, false>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_copy_constructor: Array3Q compile-time's size is not 4, or the elements are wrongly copied",
+        "test_copy_constructor: Array3Q runtime's size is not 4, or the elements are wrongly copied");
+}
+
+
+
+template<bool CS, bool RT, typename C, typename E, bool D, typename F, typename M, typename N>
+void _test_move_constructor(F&& make, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c(std::move(_test_push_back_move_helper<C>(make)));
+
+        if constexpr (D) {
+            if constexpr (c.size() != 4 || *make(0) != *c[0] || *make(1) != *c[1] || *make(2) != *c[2] || *make(3) != *c[3]) {
+                error(std::forward<M>(cs_message));
+            }
+        } else {
+            if constexpr (c.size() != 4 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2] || make(3) != c[3]) {
+                error(std::forward<M>(cs_message));
+            }
+        }
+    }
+
+    if constexpr (RT) {
+        C c(std::move(_test_push_back_move_helper<C>(make)));
+
+        if constexpr (D) {
+            if (c.size() != 4 || *make(0) != *c[0] || *make(1) != *c[1] || *make(2) != *c[2] || *make(3) != *c[3]) {
+                error(std::forward<N>(rt_message));
+            }
+        } else {
+            if (c.size() != 4 || make(0) != c[0] || make(1) != c[1] || make(2) != c[2] || make(3) != c[3]) {
+                error(std::forward<N>(rt_message));
+            }
+        }
+    }
+}
+
+
+
+void test_move_constructor() {
+    _test_move_constructor<false, true, UniquePtrQ, UniquePtrQEl, true>([] (int idx) -> UniquePtrQEl { return std::make_unique<int>(0xBADC0DE << idx); },
+        "test_move_constructor: IntQ compile-time's size is not 4, or the elements are wrongly moved",
+        "test_move_constructor: IntQ runtime's size is not 4, or the elements are wrongly moved");
+    _test_move_constructor<true, true, IntQ, IntQEl, false>([] (int idx) -> IntQEl { return 0xBADC0DE << idx; },
+        "test_move_constructor: IntQ compile-time's size is not 4, or the elements are wrongly moved",
+        "test_move_constructor: IntQ runtime's size is not 4, or the elements are wrongly moved");
+    _test_move_constructor<false, true, VectorQ, VectorQEl, false>([] (int idx) -> VectorQEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_move_constructor: VectorQ compile-time's size is not 4, or the elements are wrongly moved",
+        "test_move_constructor: VectorQ runtime's size is not 4, or the elements are wrongly moved");
+    _test_move_constructor<true, true, Array3Q, Array3QEl, false>([] (int idx) -> Array3QEl { return { idx, idx * idx, idx * idx * idx }; },
+        "test_move_constructor: Array3Q compile-time's size is not 4, or the elements are wrongly moved",
+        "test_move_constructor: Array3Q runtime's size is not 4, or the elements are wrongly moved");
 }
 
 
@@ -452,6 +788,8 @@ int main() {
         test_constructor_default,
         test_constructor_init_default_n,
         test_constructor_init_copy_n,
+        test_constructor_range,
+        test_constructor_initializer_list,
 
         // Special members
 
@@ -460,6 +798,8 @@ int main() {
         // Element Access
 
         // Modifier
+        test_push_back_copy,
+        test_push_back_move,
 
         // Iterators
 

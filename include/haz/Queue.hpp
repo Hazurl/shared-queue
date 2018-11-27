@@ -66,7 +66,7 @@ union CommonQueueElement {
 
 template<typename T>
 union ConstexprQueueElement {
-    char _placeholder;
+    /* char _placeholder; */
     T _element;
 
     template<typename...Args>
@@ -281,7 +281,10 @@ public:
     explicit inline constexpr Queue(size_type n) : base_t(0, n, n) {
         assert(n <= S);
         if constexpr (!std::is_trivially_default_constructible_v<T>) {
-            std::uninitialized_default_construct_n(get(0), n);
+            // in the constexpr case, the elements are already default constructed
+            if constexpr (! is_constexpr(n)) {
+                std::uninitialized_default_construct_n(get(0), n);
+            }
         }
     }
 
@@ -305,20 +308,23 @@ public:
 
 
     template<typename R>
-    inline constexpr Queue(std::initializer_list<R> list) : base_t(0, 0, 0) {
-        assign(std::begin(list), std::end(list));
-    }
+    inline constexpr Queue(std::initializer_list<R> list) : Queue(std::begin(list), std::end(list)) {}
 
 
     /* Specials Members */
 
-    inline constexpr Queue(const_reference_this_t other) : base_t(0, other.size, other.size) {
-        std::uninitialized_copy(std::begin(other), std::end(other), get(0));
-    }
+    inline constexpr Queue(const_reference_this_t other) : Queue(std::begin(other), std::end(other)) {}
 
 
-    inline constexpr Queue(this_t&& other) : base_t(0, other.size, other.size) {
-        std::uninitialized_move(std::begin(other), std::end(other), get(0));
+    inline constexpr Queue(this_t&& other) : Queue() {
+        if constexpr (is_constexpr(other)) {
+            for(size_type i{0}; i < other.size(); ++i) {
+                base_t::construct(base_t::_back++, std::move(other[i]));
+            }
+            base_t::_size = base_t::_back;
+        } else {
+            std::uninitialized_move(std::begin(other), std::end(other), get(0));
+        }
     }
 
 
