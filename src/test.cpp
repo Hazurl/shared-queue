@@ -479,7 +479,7 @@ void test_constructor_init_copy_n() {
 template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
 void _test_constructor_range(F&& make, M&& cs_message, N&& rt_message) {
     if constexpr (CS) {
-        constexpr std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        constexpr std::array<E, 4> es{ make(0), make(1), make(2), make(3) };
         constexpr C c(std::begin(es), std::end(es));
         constexpr typename C::size_type size = c.size();
 
@@ -489,7 +489,7 @@ void _test_constructor_range(F&& make, M&& cs_message, N&& rt_message) {
     }
 
     if constexpr (RT) {
-        std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
+        std::array<E, 4> es{ make(0), make(1), make(2), make(3) };
         C c(std::begin(es), std::end(es));
         typename C::size_type size = c.size();
 
@@ -518,21 +518,19 @@ void test_constructor_range() {
 template<bool CS, bool RT, typename C, typename E, typename F, typename M, typename N>
 void _test_constructor_initializer_list(F&& make, M&& cs_message, N&& rt_message) {
     if constexpr (CS) {
-        constexpr std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
-        constexpr C c(std::move(es));
+        constexpr C c{ make(0), make(1), make(2), make(3) };
         constexpr typename C::size_type size = c.size();
 
-        if constexpr (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+        if constexpr (size != 4 || make(0) != c[0] || make(3) != c[3]) {
             error(std::forward<M>(cs_message));
         }
     }
 
     if constexpr (RT) {
-        std::initializer_list<E> es{ make(0), make(1), make(2), make(3) };
-        C c(std::move(es));
+        C c{ make(0), make(1), make(2), make(3) };
         typename C::size_type size = c.size();
 
-        if (size != 4 || *std::begin(es) != c[0] || *(std::begin(es) + 3) != c[3]) {
+        if (size != 4 || make(0) != c[0] || make(3) != c[3]) {
             error(std::forward<N>(rt_message));
         }
     }
