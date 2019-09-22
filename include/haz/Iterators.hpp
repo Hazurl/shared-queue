@@ -35,11 +35,11 @@ public:
     /* Iterator requirement */
 
     constexpr reference operator*() const noexcept {
-        size_type wrapped = _index >= S ? _index - S : _index;
+        //size_type wrapped = _index >= S ? _index - S : _index;
         if constexpr (forward) {
-            return get(wrapped);
+            return get(_index);
         } else {
-            return get(S - 1 - wrapped);
+            return get(S - 1 - _index);
         }
     }
 
