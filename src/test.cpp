@@ -14,6 +14,185 @@ std::atomic<unsigned> error_count{0};
 std::mutex error_message_mutex;
 std::vector<std::string> error_messages;
 
+enum class Restriction {
+    Deleted, Trivial, Constexpr, ConstexprTrivial
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _DCtr;
+
+template<bool nex>
+struct _DCtr<Restriction::ConstexprTrivial, nex> {
+    constexpr _DCtr () noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _DCtr<Restriction::Deleted, nex> {
+    _DCtr () noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _DCtr<Restriction::Trivial, nex> {
+    _DCtr () noexcept(nex) = default;
+private: int _;
+};
+
+template<bool nex>
+struct _DCtr<Restriction::Constexpr, nex> {
+    constexpr _DCtr () noexcept(nex) {};
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _ICtr;
+
+template<bool nex>
+struct _ICtr<Restriction::Deleted, nex> {
+    _ICtr (int) noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _ICtr<Restriction::Constexpr, nex> {
+    constexpr _ICtr (int) noexcept(nex) {};
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _Dtr;
+
+template<bool nex>
+struct _Dtr<Restriction::ConstexprTrivial, nex> {
+    ~_Dtr () noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Dtr<Restriction::Deleted, nex> {
+    ~_Dtr () noexcept(nex) = delete;
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _Cpy_Ctr;
+
+template<bool nex>
+struct _Cpy_Ctr<Restriction::ConstexprTrivial, nex> {
+    constexpr _Cpy_Ctr (_Cpy_Ctr const&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Cpy_Ctr<Restriction::Deleted, nex> {
+    _Cpy_Ctr (_Cpy_Ctr const&) noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _Cpy_Ctr<Restriction::Trivial, nex> {
+    _Cpy_Ctr (_Cpy_Ctr const&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Cpy_Ctr<Restriction::Constexpr, nex> {
+    constexpr _Cpy_Ctr (_Cpy_Ctr const&) noexcept(nex) {};
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _Mv_Ctr;
+
+template<bool nex>
+struct _Mv_Ctr<Restriction::ConstexprTrivial, nex> {
+    constexpr _Mv_Ctr (_Mv_Ctr&&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Mv_Ctr<Restriction::Deleted, nex> {
+    _Mv_Ctr (_Mv_Ctr&&) noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _Mv_Ctr<Restriction::Trivial, nex> {
+    _Mv_Ctr (_Mv_Ctr&&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Mv_Ctr<Restriction::Constexpr, nex> {
+    constexpr _Mv_Ctr (_Mv_Ctr&&) noexcept(nex) {};
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _Cpy_Asg;
+
+template<bool nex>
+struct _Cpy_Asg<Restriction::ConstexprTrivial, nex> {
+    constexpr _Cpy_Asg& operator= (_Cpy_Asg const&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Cpy_Asg<Restriction::Deleted, nex> {
+    _Cpy_Asg& operator= (_Cpy_Asg const&) noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _Cpy_Asg<Restriction::Trivial, nex> {
+    _Cpy_Asg& operator= (_Cpy_Asg const&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Cpy_Asg<Restriction::Constexpr, nex> {
+    constexpr _Cpy_Asg& operator= (_Cpy_Asg const&) noexcept(nex) { return *this; };
+};
+
+///////////////////
+
+template<Restriction r, bool nex>
+struct _Mv_Asg;
+
+template<bool nex>
+struct _Mv_Asg<Restriction::ConstexprTrivial, nex> {
+    constexpr _Mv_Asg& operator= (_Mv_Asg&&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Mv_Asg<Restriction::Deleted, nex> {
+    _Mv_Asg& operator= (_Mv_Asg&&) noexcept(nex) = delete;
+};
+
+template<bool nex>
+struct _Mv_Asg<Restriction::Trivial, nex> {
+    _Mv_Asg& operator= (_Mv_Asg&&) noexcept(nex) = default;
+};
+
+template<bool nex>
+struct _Mv_Asg<Restriction::Constexpr, nex> {
+    constexpr _Mv_Asg& operator= (_Mv_Asg&&) noexcept(nex) { return *this; };
+};
+
+///////////////////
+
+template<
+    Restriction dctr, bool nex_dctr, 
+    Restriction ictr, bool nex_ictr, 
+    Restriction dtr, bool nex_dtr, 
+    Restriction cpy_ctr, bool nex_cpy_ctr, 
+    Restriction mv_ctr, bool nex_mv_ctr, 
+    Restriction cpy_asg, bool nex_cpy_asg, 
+    Restriction mv_asg, bool nex_mv_asg>
+struct Observer : 
+    _DCtr<dctr, nex_dctr>, 
+    _ICtr<ictr, nex_ictr>, 
+    _Dtr<dtr, nex_dtr>, 
+    _Cpy_Ctr<cpy_ctr, nex_cpy_ctr>, 
+    _Mv_Ctr<mv_ctr, nex_mv_ctr>, 
+    _Cpy_Asg<cpy_asg, nex_cpy_asg>, 
+    _Mv_Asg<mv_asg, nex_mv_asg> {};
+
 
 
 template<typename T, std::size_t S>
@@ -25,6 +204,15 @@ using UniquePtrQEl = std::unique_ptr<int>;
 using UniquePtrQ = Queue<UniquePtrQEl, 5>;
 
 using IntQEl = int;
+/*using IntQEl = Observer<
+    Restriction::ConstexprTrivial, true,
+    Restriction::Constexpr, true,
+    Restriction::ConstexprTrivial, true,
+    Restriction::ConstexprTrivial, true,
+    Restriction::ConstexprTrivial, true,
+    Restriction::ConstexprTrivial, true,
+    Restriction::ConstexprTrivial, true
+    >;*/
 using IntQ = Queue<IntQEl, 5>;
 
 using VectorQEl = std::vector<int>;
@@ -765,8 +953,228 @@ void test_move_constructor() {
 
 
 
+
+template<bool CS, bool RT, typename C, typename M, typename N>
+void _test_capacity(M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c;
+        if constexpr (c.capacity() != 5) {
+            error(std::forward<M>(cs_message));
+        }
+    } 
+    
+    if constexpr (RT) {
+        C c;
+        if (c.capacity() != 5) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+void test_capacity() {
+    _test_capacity<false, true, UniquePtrQ>(
+        "test_capacity: UniquePtrQ compile-time's capacity is not 5",
+        "test_capacity: UniquePtrQ runtime's capacity is not 5");
+    _test_capacity<true, true, IntQ>(
+        "test_capacity: IntQ compile-time's capacity is not 5",
+        "test_capacity: IntQ runtime's capacity is not 5");
+    _test_capacity<false, true, VectorQ>(
+        "test_capacity: VectorQ compile-time's capacity is not 5",
+        "test_capacity: VectorQ runtime's capacity is not 5");
+    _test_capacity<true, true, Array3Q>(
+        "test_capacity: Array3Q compile-time's capacity is not 5",
+        "test_capacity: Array3Q runtime's capacity is not 5");
+    _test_capacity<true, true, MutexQ>(
+        "test_capacity: MutexQ compile-time's capacity is not 5",
+        "test_capacity: MutexQ runtime's capacity is not 5");
+}
+
+
+
+template<bool CS, bool RT, typename C, typename M, typename N>
+void _test_max_size(M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c;
+        if constexpr (c.max_size() != 5) {
+            error(std::forward<M>(cs_message));
+        }
+    } 
+    
+    if constexpr (RT) {
+        C c;
+        if (c.max_size() != 5) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+void test_max_size() {
+    _test_max_size<false, true, UniquePtrQ>(
+        "test_max_size: UniquePtrQ compile-time's max size is not 5",
+        "test_max_size: UniquePtrQ runtime's max size is not 5");
+    _test_max_size<true, true, IntQ>(
+        "test_max_size: IntQ compile-time's max size is not 5",
+        "test_max_size: IntQ runtime's max size is not 5");
+    _test_max_size<false, true, VectorQ>(
+        "test_max_size: VectorQ compile-time's max size is not 5",
+        "test_max_size: VectorQ runtime's max size is not 5");
+    _test_max_size<true, true, Array3Q>(
+        "test_max_size: Array3Q compile-time's max size is not 5",
+        "test_max_size: Array3Q runtime's max size is not 5");
+    _test_max_size<true, true, MutexQ>(
+        "test_max_size: MutexQ compile-time's max size is not 5",
+        "test_max_size: MutexQ runtime's max size is not 5");
+}
+
+
+
+template<bool CS, bool RT, typename C, typename M, typename N>
+void _test_size(M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c;
+        if constexpr (c.size() != 0) {
+            error(std::forward<M>(cs_message));
+        }
+    } 
+    
+    if constexpr (RT) {
+        C c;
+        if (c.size() != 0) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+template<bool CS, bool RT, typename C, typename F, typename M, typename N>
+void _test_size_after_emplace_back(F&& f, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c = [&] () { C _c; _c.emplace_back(f()); return _c; }();
+        if constexpr (c.size() != 1) {
+            error(std::forward<M>(cs_message));
+        }
+    } 
+    
+    if constexpr (RT) {
+        C c;
+        c.emplace_back(f());
+        if (c.size() != 1) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+template<bool CS, bool RT, typename C, typename F, typename M, typename N>
+void _test_size_after_emplace_back_and_pop_front(F&& f, M&& cs_message, N&& rt_message) {
+    if constexpr (CS) {
+        constexpr C c = [&] () { C _c; _c.emplace_back(f()); _c.pop_front(); return _c; }();
+        if constexpr (c.size() != 0) {
+            error(std::forward<M>(cs_message));
+        }
+    } 
+    
+    if constexpr (RT) {
+        C c;
+        c.emplace_back(f());
+        c.pop_front();
+        if (c.size() != 0) {
+            error(std::forward<N>(rt_message));
+        }
+    }
+}
+
+
+
+void test_size() {
+    _test_size<false, true, UniquePtrQ>(
+        "test_size: UniquePtrQ compile-time's size is not 0",
+        "test_size: UniquePtrQ runtime's size is not 0");
+    _test_size<true, true, IntQ>(
+        "test_size: IntQ compile-time's size is not 0",
+        "test_size: IntQ runtime's size is not 0");
+    _test_size<false, true, VectorQ>(
+        "test_size: VectorQ compile-time's size is not 0",
+        "test_size: VectorQ runtime's size is not 0");
+    _test_size<true, true, Array3Q>(
+        "test_size: Array3Q compile-time's size is not 0",
+        "test_size: Array3Q runtime's size is not 0");
+    _test_size<false, true, MutexQ>(
+        "test_size: MutexQ compile-time's size is not 0",
+        "test_size: MutexQ runtime's size is not 0");
+
+    _test_size_after_emplace_back<false, true, UniquePtrQ>( [] () { return std::make_unique<int>(0xBADC0DE); },
+        "test_size_after_emplace_back: UniquePtrQ compile-time's size is not 1",
+        "test_size_after_emplace_back: UniquePtrQ runtime's size is not 1");
+    _test_size_after_emplace_back<true, true, IntQ>( [] () { return 0xBADC0DE; },
+        "test_size_after_emplace_back: IntQ compile-time's size is not ",
+        "test_size_after_emplace_back: IntQ runtime's size is not ");
+    _test_size_after_emplace_back<false, true, VectorQ>( [] () { return VectorQEl{ 0xBADC0DE }; },
+        "test_size_after_emplace_back: VectorQ compile-time's size is not ",
+        "test_size_after_emplace_back: VectorQ runtime's size is not ");
+    _test_size_after_emplace_back<true, true, Array3Q>( [] () { return Array3QEl{ 0xBADC0DE };; },
+        "test_size_after_emplace_back: Array3Q compile-time's size is not ",
+        "test_size_after_emplace_back: Array3Q runtime's size is not ");
+
+    _test_size_after_emplace_back_and_pop_front<false, true, UniquePtrQ>( [] () { return std::make_unique<int>(0xBADC0DE); },
+        "test_size_after_emplace_back_and_pop_front: UniquePtrQ compile-time's size is not 0",
+        "test_size_after_emplace_back_and_pop_front: UniquePtrQ runtime's size is not 0");
+    _test_size_after_emplace_back_and_pop_front<true, true, IntQ>( [] () { return 0xBADC0DE; },
+        "test_size_after_emplace_back_and_pop_front: IntQ compile-time's size is not 0",
+        "test_size_after_emplace_back_and_pop_front: IntQ runtime's size is not 0");
+    _test_size_after_emplace_back_and_pop_front<false, true, VectorQ>( [] () { return VectorQEl{ 0xBADC0DE }; },
+        "test_size_after_emplace_back_and_pop_front: VectorQ compile-time's size is not 0",
+        "test_size_after_emplace_back_and_pop_front: VectorQ runtime's size is not 0");
+    _test_size_after_emplace_back_and_pop_front<true, true, Array3Q>( [] () { return Array3QEl{ 0xBADC0DE };; },
+        "test_size_after_emplace_back_and_pop_front: Array3Q compile-time's size is not 0",
+        "test_size_after_emplace_back_and_pop_front: Array3Q runtime's size is not 0");
+}
+
+
+
+void test_empty() {
+
+}
+
+
+
+void test_full() {
+
+}
+
+
+
+
+
+
 int main() {
     using func_t = void(*)();
+
+    std::cout << std::is_trivially_constructible_v<int, int> << '\n';
+
+    struct X {
+        int i;
+    };
+
+    struct Y {
+        Y(int ii) noexcept : i(ii) {};
+        int i;
+    };
+
+    struct Z {
+        Z(int) noexcept {};
+        int i;
+    };
+
+    std::cout << std::is_trivially_constructible_v<X, int> << '\n';
+    std::cout << std::is_trivially_constructible_v<Y, int> << '\n';
+    std::cout << std::is_trivially_constructible_v<Z, int> << '\n';
 
     std::vector<func_t> funcs {
         // Traits
@@ -792,6 +1200,11 @@ int main() {
         // Special members
 
         // Capacity
+        test_capacity,
+        test_max_size,
+        test_size,
+        test_empty,
+        test_full,
 
         // Element Access
 
@@ -815,8 +1228,12 @@ int main() {
         t.join();
     }
 
-    for(auto const& m : error_messages) {
-        std::cerr << m << '\n';
+    if (error_messages.empty()) {
+        std::cout << "\033[32;1mAll good :)\033[0m\n";
+    } else {
+        for(auto const& m : error_messages) {
+            std::cerr << m << '\n';
+        }
     }
 
     return error_count;
