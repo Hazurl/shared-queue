@@ -26,7 +26,7 @@ public:
             lock.unlock();
             throw std::runtime_error("Interrupt thread!");
         }
-        return std::move(lock);
+        return lock;
     }
     std::unique_lock<std::mutex> wait_not_full() { 
         return wait_not_full(acquire_lock());
@@ -38,7 +38,7 @@ public:
             lock.unlock();
             throw std::runtime_error("Interrupt thread!");
         }
-        return std::move(lock);
+        return lock;
     }
 
     void interrupt_all() {
