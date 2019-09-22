@@ -38,7 +38,6 @@ data_t real_producer() {
 void real_consumer(data_t d, std::ostream& os) {
     //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     os << d << '\n';
-    ++count;
 }
 
 void producer(Prod_t prod) {
@@ -61,6 +60,7 @@ void consumer(Cons_t cons) {
             data_t value = cons.pop();
             real_consumer(value, out.get());
             //scout << "Consume " << value << '\n';
+            ++count;
 
             if (++out_count >= max) {
                 out.dump(); 
