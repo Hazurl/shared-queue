@@ -158,7 +158,7 @@ constexpr void assign(std::initilializer_list&lt;T&gt; list) noexcept(/* see bel
 <a class="header" href="#exception" id="exception"><h2>Exception</h2></a>
 <blockquote>
 <p><strong>noexcept specification:</strong>
-<code>noexcept(is_nothrow_copy_constructible_v&lt;decltype(*std::declval&lt;InputIt&gt;)&gt;)</code> for (1)<br />
+<code>noexcept(is_nothrow_constructible_v&lt;decltype(*std::declval&lt;InputIt&gt;)&gt;)</code> for (1)<br />
 <code>noexcept(is_nothrow_copy_constructible_v&lt;T&gt;)</code> for (2-3)</p>
 </blockquote>
 <a class="header" href="#complexity" id="complexity"><h2>Complexity</h2></a>
